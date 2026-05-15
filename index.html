@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+        <html lang="en">
+
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Brassring TalentGateway — Complete Architecture Reference</title>
+            <link rel="preconnect" href="https://fonts.googleapis.com">
+            <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+            <link
+                href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap"
+                rel="stylesheet">
+            <link rel="stylesheet" href="style.css">
+        </head>
+
+        <body>
+            <div class="app-container">
+                <!-- Sidebar Navigation -->
+                <nav class="sidebar">
+                    <div class="sidebar-header">
+                        <div class="logo">TG</div>
+                        <h3>TalentGateway</h3>
+                    </div>
+                    <ul class="nav-links" id="nav-links">
+                        <li><a href="#sec01"><span class="nav-num">01</span> System Overview</a></li>
+                        <li><a href="#sec02"><span class="nav-num">02</span> N-Tier Architecture</a></li>
+                        <li><a href="#sec03"><span class="nav-num">03</span> Layer-to-Layer Flow</a></li>
+                        <li><a href="#sec04"><span class="nav-num">04</span> Frontend Architecture</a></li>
+                        <li><a href="#sec05"><span class="nav-num">05</span> i18n Pipeline</a></li>
+                        <li><a href="#sec06"><span class="nav-num">06</span> Service-to-Service</a></li>
+                        <li><a href="#sec07"><span class="nav-num">07</span> Data Access Layer</a></li>
+                        <li><a href="#sec08"><span class="nav-num">08</span> Module Communication</a></li>
+                        <li><a href="#sec09"><span class="nav-num">09</span> Quick Reference</a></li>
+                        <li><a href="#sec10"><span class="nav-num">10</span> Design Principles</a></li>
+                        <li><a href="#sec11"><span class="nav-num">11</span> Angular Architecture</a></li>
+                    </ul>
+                </nav>
+
+                <!-- Main Content -->
+                <main class="content">
+                    <!-- Hero Section -->
+                    <header class="hero">
+                        <div class="hero-label">ARCHITECTURE REFERENCE</div>
+                        <h1 class="hero-title">Brassring TalentGateway</h1>
+                        <h2 class="hero-subtitle">Layer-to-Layer & Service-to-Service Communication Guide</h2>
+                        <p class="hero-desc">A comprehensive walkthrough of every communication boundary in the system —
+                            from the browser through the N-Tier backend, across service boundaries, down to SQL Server,
+                            and back.</p>
+                        <div class="tech-stack">
+                            <span class="badge">.NET 4.6.1</span>
+                            <span class="badge">ASP.NET MVC 5</span>
+                            <span class="badge">Angular 19</span>
+                            <span class="badge">WCF</span>
+                            <span class="badge">ASMX</span>
+                            <span class="badge">ADO.NET</span>
+                        </div>
+                    </header>
+
+                    <!-- Section 01 -->
+                    <section id="sec01" class="doc-section">
+                        <div class="section-badge"><span class="num">01</span><span class="title">System Overview &
+                                Solution Map</span></div>
+                        <h2>What is TalentGateway?</h2>
+                        <p>Brassring TalentGateway is a mature enterprise recruitment platform built on .NET Framework
+                            4.6.1. It uses a hybrid architecture: a firmly rooted N-Tier backend combined with a
+                            progressive frontend modernisation strategy that injects Angular 19 microfrontends into
+                            legacy ASP.NET MVC pages.</p>
+                        <p>The system is split across multiple Visual Studio solutions, each responsible for a distinct
+                            concern. Communication between these solutions happens entirely at the HTTP/TCP boundary —
+                            they are never linked as shared library references.</p>
+
+                        <h3>Solution Map</h3>
+                        <div class="table-wrapper">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Solution</th>
+                                        <th>Type</th>
+                                        <th>Purpose</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="mono teal-text">TalentGatewayMVC.sln</td>
+                                        <td class="purple-text">Primary App</td>
+                                        <td>Main N-Tier web application (MVC + Core + Data)</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="mono teal-text">GatewayQuestionnaire.sln</td>
+                                        <td class="purple-text">Module</td>
+                                        <td>Standalone questionnaire management (uses EF 5.0)</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="mono teal-text">TGWCFServices.sln</td>
+                                        <td class="purple-text">Service</td>
+                                        <td>WCF endpoints — SOAP/TCP for backend integration</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="mono teal-text">CandidateWebService.sln</td>
+                                        <td class="purple-text">Service</td>
+                                        <td>ASMX web service — candidate data operations</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="mono teal-text">SearchWebService.sln</td>
+                                        <td class="purple-text">Service</td>
+                                        <td>ASMX web service — job search indexing</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="mono teal-text">KASTalentGateway.sln</td>
+                                        <td class="purple-text">Legacy</td>
+                                        <td>Legacy ASP.NET WebForms — legacy screens</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="mono teal-text">TalentGateway.sln</td>
+                                        <td class="purple-text">Legacy</td>
+                                        <td>Older WebForms environment</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </section>
+
+                    <!-- Section 02 -->
+                    <section id="sec02" class="doc-section">
+                        <div class="section-badge"><span class="num">02</span><span class="title">N-Tier Backend
+                                Architecture — Layer by Layer</span></div>
+                        <h2>Overview</h2>
+                        <p>The main application (TalentGatewayMVC.sln) is structured into four distinct tiers. Each
+                            layer has a single responsibility, strict dependency direction (upward layers depend on
+                            lower layers, never the reverse), and communicates with adjacent layers only — no layer
+                            skips another.</p>
+
+                        <div class="layer-cards">
+                            <div class="layer-card blue">
+                                <div class="layer-num">L1</div>
+                                <div class="layer-content">
+                                    <h3>Presentation Layer — TG.Web.UI</h3>
+                                    <div class="layer-meta">
+                                        <span class="path">Path: TGNewUI\UserInterface\MVC\TG.Web.UI</span>
+                                        <span class="tech">Tech: ASP.NET MVC 5.2.7 · Razor 3.2.7</span>
+                                    </div>
+                                    <ul class="bullet-list">
+                                        <li>Receives HTTP requests and routes them to the correct controller action</li>
+                                        <li>Renders Razor (.cshtml) views — the host page for both legacy AngularJS
+                                            templates and modern Angular 19 Custom Elements</li>
+                                        <li>Manages user sessions and HTTP authentication cookies</li>
+                                        <li>Calls TG.Core services — never TG.Data directly</li>
+                                        <li>Returns HTTP responses: full HTML pages or JSON (via Web API controllers)
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="layer-card amber">
+                                <div class="layer-num">L2</div>
+                                <div class="layer-content">
+                                    <h3>Business / Infrastructure Layer — TG.Core</h3>
+                                    <div class="layer-meta">
+                                        <span class="path">Path: TGNewUI\Infrastructure\TG.Core</span>
+                                        <span class="tech">Tech: C# Class Library · .NET Framework 4.6.1</span>
+                                    </div>
+                                    <ul class="bullet-list">
+                                        <li>TG.Core.Utilities: CommonUtil.cs, RestClient.cs, TGEmailHelper.cs —
+                                            cross-cutting helpers</li>
+                                        <li>TG.Core.Services: WcfServiceInvoker.cs and ChannelFactoryManager.cs — manage
+                                            all outbound WCF calls</li>
+                                        <li>Cryptography: EncryptionManager.cs handles all data protection and key
+                                            management</li>
+                                        <li>Logging: ILCEventLogger.cs and MSMQ-based loggers for audit trails</li>
+                                        <li>Contains no HTTP or UI concerns — purely business and infrastructure logic
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="layer-card red">
+                                <div class="layer-num">L3</div>
+                                <div class="layer-content">
+                                    <h3>Data Access Layer — TG.Data</h3>
+                                    <div class="layer-meta">
+                                        <span class="path">Path: TGNewUI\DataAccess\TG.Data</span>
+                                        <span class="tech">Tech: ADO.NET · System.Data.SqlClient · Custom
+                                            DatabaseHelper</span>
+                                    </div>
+                                    <ul class="bullet-list">
+                                        <li>DatabaseHelper.cs executes stored procedures and parameterised SQL queries
+                                        </li>
+                                        <li>CommonDataUtil.cs handles data hydration — mapping raw SqlDataReader rows to
+                                            C# objects</li>
+                                        <li>SessionRepository.cs manages state/session persistence in SQL</li>
+                                        <li>No ORM (Entity Framework not used here) — raw ADO.NET for performance and
+                                            legacy compatibility</li>
+                                        <li>Returns mapped entity objects back to TG.Core — never surfaces raw
+                                            DataReader to upper layers</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="layer-card purple">
+                                <div class="layer-num">L4</div>
+                                <div class="layer-content">
+                                    <h3>Service Contracts — TG.Services.Contracts</h3>
+                                    <div class="layer-meta">
+                                        <span class="path">Path: TGNewUI\Services\TG.Services.Contracts</span>
+                                        <span class="tech">Tech: C# Interface Library</span>
+                                    </div>
+                                    <ul class="bullet-list">
+                                        <li>Defines C# interfaces that decouple service callers from implementations
+                                        </li>
+                                        <li>Both local (in-process) implementations and WCF remote proxies implement
+                                            these interfaces</li>
+                                        <li>Allows swapping between local and remote service implementations without
+                                            changing calling code</li>
+                                        <li>Referenced by TG.Core and TG.Web.UI — never by TG.Data</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Section 03 -->
+                    <section id="sec03" class="doc-section">
+                        <div class="section-badge"><span class="num">03</span><span class="title">Layer-to-Layer
+                                Communication: How Data Flows</span></div>
+                        <h2>A Request's Journey — End to End</h2>
+                        <p>Every user interaction follows the same vertical path through the layers. Below is a concrete
+                            walkthrough using a job search request as the example.</p>
+
+                        <div class="table-wrapper">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>From → To</th>
+                                        <th>Mechanism</th>
+                                        <th>What travels</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>1</td>
+                                        <td class="bold">Browser → TG.Web.UI</td>
+                                        <td class="mono teal-text">HTTP GET/POST</td>
+                                        <td>URL params, form body, session cookies</td>
+                                    </tr>
+                                    <tr>
+                                        <td>2</td>
+                                        <td class="bold">Controller → TG.Core</td>
+                                        <td class="mono teal-text">C# method call</td>
+                                        <td>Criteria/command object (e.g. JobSearchCriteria)</td>
+                                    </tr>
+                                    <tr>
+                                        <td>3</td>
+                                        <td class="bold">TG.Core → TG.Data</td>
+                                        <td class="mono teal-text">C# method call</td>
+                                        <td>Query parameters passed to repository interface</td>
+                                    </tr>
+                                    <tr>
+                                        <td>4</td>
+                                        <td class="bold">TG.Data → SQL Server</td>
+                                        <td class="mono teal-text">ADO.NET SqlCommand</td>
+                                        <td>Parameterised stored procedure call</td>
+                                    </tr>
+                                    <tr>
+                                        <td>5</td>
+                                        <td class="bold">SQL Server → TG.Data</td>
+                                        <td class="mono teal-text">SqlDataReader</td>
+                                        <td>Raw result set rows</td>
+                                    </tr>
+                                    <tr>
+                                        <td>6</td>
+                                        <td class="bold">TG.Data → TG.Core</td>
+                                        <td class="mono teal-text">C# return value</td>
+                                        <td>Mapped entity objects (e.g. List&lt;JobEntity&gt;)</td>
+                                    </tr>
+                                    <tr>
+                                        <td>7</td>
+                                        <td class="bold">TG.Core → TG.Web.UI</td>
+                                        <td class="mono teal-text">C# return value</td>
+                                        <td>DTO / domain result (e.g. JobSearchResultDto)</td>
+                                    </tr>
+                                    <tr>
+                                        <td>8</td>
+                                        <td class="bold">TG.Web.UI → Browser</td>
+                                        <td class="mono teal-text">HTTP 200 response</td>
+                                        <td>Rendered Razor HTML page or JSON payload</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="info-box blue">
+                            <h4>Strict Layer Ordering Rule</h4>
+                            <p>No layer may skip another. The Presentation layer (TG.Web.UI) never calls TG.Data
+                                directly. Data always travels back up through each layer in reverse order — each layer
+                                transforms and validates it before passing it up.</p>
+                        </div>
+                    </section>
+
+                    <!-- Section 04 -->
+                    <section id="sec04" class="doc-section">
+                        <div class="section-badge"><span class="num">04</span><span class="title">Frontend Architecture
+                                & Frontend-to-Backend Communication</span></div>
+                        <h2>Three Frontend Generations</h2>
+                        <p>The frontend has three generations of UI technology living side by side in the same page,
+                            each with a different communication pattern with the backend.</p>
+
+                        <h3>Generation 1 — Legacy ASP.NET WebForms</h3>
+                        <p>The oldest screens live in KASTalentGateway.sln. These are ASP.NET WebForms (.aspx) pages.
+                            Communication is the classic PostBack model: the entire page round-trips to the server on
+                            every action. No JavaScript API calls. The server re-renders the full page and sends it
+                            back.</p>
+
+                        <h3>Generation 2 — ASP.NET MVC Razor + AngularJS (v1.x)</h3>
+                        <p>The core of TG.Web.UI. The server renders HTML via Razor (.cshtml). Inside these pages,
+                            legacy AngularJS (v1.x) adds client-side interactivity using ng- directives. The critical
+                            point: even the AngularJS templates are processed server-side first — the .NET Razor engine
+                            substitutes @GlobalResources variables before the HTML ever reaches the browser.</p>
+
+                        <div class="two-col-grid">
+                            <div class="card card-blue">
+                                <div class="card-title">Server renders this .cshtml:</div>
+                                <div class="mono card-mono">@GlobalResources.Label_searchJobs</div>
+                            </div>
+                            <div class="card-arrow">→</div>
+                            <div class="card card-teal">
+                                <div class="card-title">Browser receives:</div>
+                                <div class="mono card-mono">Search Jobs</div>
+                            </div>
+                        </div>
+
+                        <h3>Generation 3 — Angular 19 Custom Elements (Microfrontends)</h3>
+                        <p>The modern approach. Angular 19 components are compiled into standard Web Components and
+                            injected into Razor pages. They run entirely on the client and communicate with the backend
+                            via REST/JSON API calls — they do not participate in the Razor rendering pipeline at all.
+                        </p>
+
+                        <h4>Microfrontend Integration Mechanism</h4>
+                        <p>The Angular TG-Widgets project compiles to web components through a three-step process:</p>
+                        <ul class="bullet-list indent">
+                            <li>Bootstrap (main.web.ts / main.chatbot.ts): Uses Angular's createCustomElement() to wrap
+                                Angular components into web component wrappers.</li>
+                            <li>Registration: The wrapped components are registered with the browser's custom element
+                                registry.</li>
+                            <li>Consumption: Razor views load the compiled JS bundle and simply include the HTML tag
+                                &lt;app-job-side-preview&gt;.</li>
+                        </ul>
+
+                        <div class="info-box teal">
+                            <h4>Key Isolation Guarantee</h4>
+                            <p>Angular Custom Elements own their own DOM, styles (SCSS), state (RxJS), and API calls.
+                                They are completely isolated from the surrounding Razor page's JavaScript scope. No
+                                coupling to the MVC page lifecycle.</p>
+                        </div>
+                    </section>
+
+                    <!-- Section 05 -->
+                    <section id="sec05" class="doc-section">
+                        <div class="section-badge"><span class="num">05</span><span class="title">Internationalization
+                                (i18n) Pipeline</span></div>
+                        <h2>Two Separate Pipelines for One Source of Truth</h2>
+                        <p>All translations originate from .resx resource files in TG.Web.UI. However, because the
+                            legacy and modern stacks run at different times (server vs. client), they consume these
+                            strings through completely different pipelines.</p>
+
+                        <div class="two-col-grid">
+                            <div class="card card-blue full-height">
+                                <div class="card-title">Pipeline 1 — Legacy MVC + AngularJS</div>
+                                <ul class="bullet-list">
+                                    <li>Razor (.cshtml) evaluates .resx via auto-generated strongly-typed C# classes at
+                                        render time</li>
+                                    <li>Syntax: @GlobalResources.Label_searchJobs in the .cshtml template</li>
+                                    <li>.NET replaces the variable with the translated string before sending HTML to the
+                                        browser</li>
+                                    <li>Even AngularJS ng-template blocks are processed this way</li>
+                                    <li>No HTTP call for strings — they are baked into the HTML response</li>
+                                </ul>
+                            </div>
+                            <div class="card card-teal full-height">
+                                <div class="card-title">Pipeline 2 — Angular 19 Custom Elements</div>
+                                <ul class="bullet-list">
+                                    <li>Angular runs entirely client-side — cannot use @GlobalResources Razor syntax
+                                    </li>
+                                    <li>.resx strings are converted and synced to JSON files in assets/i18n/</li>
+                                    <li>On widget boot, @ngx-translate's TranslateHttpLoader fetches the correct JSON
+                                        via HTTP</li>
+                                    <li>Angular components use the translate pipe</li>
+                                    <li>String loading is async — widgets display a loading state until the JSON is
+                                        fetched</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="info-box amber">
+                            <h4>Single Source of Truth</h4>
+                            <p>The .resx files are the canonical source. The JSON files in assets/i18n/ are derived
+                                artifacts — they must be regenerated whenever .resx files change. If these get out of
+                                sync, the Angular widgets will show untranslated keys while the MVC pages show correct
+                                strings.</p>
+                        </div>
+                    </section>
+
+                    <!-- Section 06 -->
+                    <section id="sec06" class="doc-section">
+                        <div class="section-badge"><span class="num">06</span><span class="title">Service-to-Service
+                                Communication (WCF & ASMX)</span></div>
+                        <h2>Cross-Process Service Calls</h2>
+                        <p>When TG.Core needs functionality from an external service, it crosses a process boundary. Two
+                            technologies handle this: WCF (Windows Communication Foundation) for newer integrations, and
+                            ASMX (legacy XML Web Services) for older ones. Both serialise C# objects to XML and send
+                            them over HTTP(S) or TCP.</p>
+
+                        <h3>WCF — Windows Communication Foundation</h3>
+                        <p>Used by TGWCFServices.sln. The calling side (TG.Core.Services) manages WCF connections
+                            through two key classes:</p>
+                        <ul class="bullet-list">
+                            <li>WcfServiceInvoker.cs — wraps service operation calls and handles WCF exceptions
+                                (FaultException&lt;T&gt;)</li>
+                            <li>ChannelFactoryManager.cs — creates and caches ChannelFactory&lt;TService&gt; instances
+                            </li>
+                        </ul>
+
+                        <h3>ASMX — Legacy XML Web Services</h3>
+                        <p>Used by CandidateWebService.sln and SearchWebService.sln. Older than WCF; uses the Add Web
+                            Reference (WSDL) pattern to generate a typed proxy class. The calling pattern is similar to
+                            WCF but the proxy is a generated class rather than a ChannelFactory.</p>
+
+                        <div class="two-col-grid">
+                            <div class="card card-blue">
+                                <div class="card-title">WCF — Key Characteristics</div>
+                                <ul class="bullet-list">
+                                    <li>Supports multiple bindings: BasicHttpBinding, NetTcpBinding, WSHttpBinding</li>
+                                    <li>Uses [ServiceContract] / [OperationContract] attributes</li>
+                                    <li>Uses [DataContract] / [DataMember] attributes for serialisable types</li>
+                                    <li>ChannelFactory is cached and reused</li>
+                                </ul>
+                            </div>
+                            <div class="card card-gray">
+                                <div class="card-title">ASMX — Key Characteristics</div>
+                                <ul class="bullet-list">
+                                    <li>Older standard; WCF is the successor</li>
+                                    <li>Services are classes decorated with [WebService] attribute</li>
+                                    <li>Proxy generated at design-time from WSDL using 'Add Web Reference'</li>
+                                    <li>Always HTTP — no TCP or named pipe options</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Section 07 -->
+                    <section id="sec07" class="doc-section">
+                        <div class="section-badge"><span class="num">07</span><span class="title">Data Access Layer:
+                                ADO.NET & Entity Framework Exception</span></div>
+                        <h2>Primary Data Access — Raw ADO.NET</h2>
+                        <p>The main application deliberately avoids Entity Framework in favour of raw ADO.NET. This is a
+                            conscious legacy design decision, likely driven by performance requirements and the existing
+                            investment in stored procedures.</p>
+
+                        <div class="table-wrapper">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Component</th>
+                                        <th>Role</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="mono teal-text">DatabaseHelper.cs</td>
+                                        <td>Central utility for creating SqlConnection, SqlCommand, executing stored
+                                            procedures. Wraps ADO.NET boilerplate.</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="mono teal-text">CommonDataUtil.cs</td>
+                                        <td>Data hydration — maps raw SqlDataReader column values to C# entity
+                                            properties. Acts as the manual ORM layer.</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="mono teal-text">SessionRepository.cs</td>
+                                        <td>Persists and retrieves user session state to/from SQL Server tables using
+                                            the same ADO.NET pattern.</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="mono teal-text">System.Data.SqlClient</td>
+                                        <td>The .NET ADO.NET namespace. SqlConnection, SqlCommand, SqlDataReader,
+                                            SqlParameter are the core types used throughout TG.Data.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="info-box amber" style="margin-top: 2rem;">
+                            <h4>The Entity Framework Exception — GatewayQuestionnaire</h4>
+                            <p>Entity Framework IS used — but only in the GatewayQuestionnaire module
+                                (GatewayQuestionnaire.sln). This module was built separately from the core application
+                                and uses EF 5.0.0 for its database interactions. The main TG.Data and TG.Core.Database
+                                layers do NOT use Entity Framework.</p>
+                        </div>
+                    </section>
+
+                    <!-- Section 08 -->
+                    <section id="sec08" class="doc-section">
+                        <div class="section-badge"><span class="num">08</span><span class="title">Module-Level
+                                Communication</span></div>
+                        <h2>How Separate Solutions Communicate</h2>
+                        <p>The various .sln modules are never linked as shared C# library references. They are separate
+                            deployed applications. Communication between them happens exclusively at the HTTP boundary.
+                        </p>
+
+                        <div class="table-wrapper">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Caller</th>
+                                        <th>Target</th>
+                                        <th>Method</th>
+                                        <th>Details</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="bold">TalentGatewayMVC</td>
+                                        <td>GatewayQuestionnaire</td>
+                                        <td class="mono teal-text">HTTP Redirect</td>
+                                        <td>MVC sends candidate to GQ app via redirect with session/token. GQ returns
+                                            candidate via redirect on completion.</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="bold">TalentGatewayMVC</td>
+                                        <td>TGWCFServices</td>
+                                        <td class="mono teal-text">SOAP / TCP</td>
+                                        <td>TG.Core.Services invokes WCF operations via ChannelFactory proxies.</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="bold">TalentGatewayMVC</td>
+                                        <td>CandidateWebService</td>
+                                        <td class="mono teal-text">XML over HTTP</td>
+                                        <td>Generated ASMX proxy class makes SOAP calls for candidate data operations.
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="bold">TalentGatewayMVC</td>
+                                        <td>SearchWebService</td>
+                                        <td class="mono teal-text">XML over HTTP</td>
+                                        <td>Generated ASMX proxy class calls search service for job index operations.
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="bold">Angular Widget</td>
+                                        <td>TG.Web.UI Web API</td>
+                                        <td class="mono teal-text">REST / JSON</td>
+                                        <td>HttpClient calls to /api/* routes. Fully async via RxJS Observables.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </section>
+
+                    <!-- Section 09 -->
+                    <section id="sec09" class="doc-section">
+                        <div class="section-badge"><span class="num">09</span><span class="title">Communication Quick
+                                Reference Table</span></div>
+                        <h2>All Communication Paths at a Glance</h2>
+                        <p>Every communication boundary in the system, from browser to database.</p>
+
+                        <div class="table-wrapper full-width">
+                            <table class="data-table comm-table">
+                                <thead>
+                                    <tr>
+                                        <th>From</th>
+                                        <th>To</th>
+                                        <th>Protocol</th>
+                                        <th>Format</th>
+                                        <th>Notes</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="bold">Browser</td>
+                                        <td>TG.Web.UI</td>
+                                        <td class="teal-text bold">HTTP / HTTPS</td>
+                                        <td class="purple-text">HTML / Form</td>
+                                        <td>Full page request or form POST. Session cookies carry auth state.</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="bold">Browser (Angular)</td>
+                                        <td>ASP.NET Web API</td>
+                                        <td class="teal-text bold">REST / AJAX</td>
+                                        <td class="purple-text">JSON</td>
+                                        <td>HttpClient + RxJS. No page reload. Endpoints under /api/*.</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="bold">MVC Controller</td>
+                                        <td>TG.Core Service</td>
+                                        <td class="teal-text bold">In-process</td>
+                                        <td class="purple-text">C# objects</td>
+                                        <td>Direct method call via injected interface (TG.Services.Contracts).</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="bold">TG.Core</td>
+                                        <td>TG.Data Repo</td>
+                                        <td class="teal-text bold">In-process</td>
+                                        <td class="purple-text">C# objects</td>
+                                        <td>Repository pattern. Interface defined in TG.Services.Contracts.</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="bold">TG.Data</td>
+                                        <td>SQL Server</td>
+                                        <td class="teal-text bold">ADO.NET</td>
+                                        <td class="purple-text">SQL / DataReader</td>
+                                        <td>SqlCommand with stored procedures. SqlDataReader for results.</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="bold">TG.Core</td>
+                                        <td>WCF Service</td>
+                                        <td class="teal-text bold">SOAP / TCP</td>
+                                        <td class="purple-text">XML DataContract</td>
+                                        <td>ChannelFactory via WcfServiceInvoker.cs and ChannelFactoryManager.cs.</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="bold">TG.Core / MVC</td>
+                                        <td>ASMX Service</td>
+                                        <td class="teal-text bold">SOAP / HTTP</td>
+                                        <td class="purple-text">XML SOAP</td>
+                                        <td>Generated WSDL proxy. XmlSerializer for types.</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="bold">MVC</td>
+                                        <td>GatewayQuestionnaire</td>
+                                        <td class="teal-text bold">HTTP Redirect</td>
+                                        <td class="purple-text">URL + Session</td>
+                                        <td>302 redirect. Session token carries identity across apps.</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="bold">Angular Widget</td>
+                                        <td>i18n JSON</td>
+                                        <td class="teal-text bold">HTTP GET</td>
+                                        <td class="purple-text">JSON</td>
+                                        <td>TranslateHttpLoader fetches /assets/i18n/GlobalResources.{lcid}.json.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </section>
+
+                    <!-- Section 10 -->
+                    <section id="sec10" class="doc-section">
+                        <div class="section-badge"><span class="num">10</span><span class="title">Key Design
+                                Principles</span></div>
+                        <h2>Architectural Rules</h2>
+                        <p>These are the structural constraints that govern how the system is built and how it evolves.
+                            Understanding them is essential for safely modifying or extending any part of the codebase.
+                        </p>
+
+                        <div class="principle-cards">
+                            <div class="principle-card card-blue">
+                                <h3>Strict Layer Ordering — No Skipping</h3>
+                                <ul class="bullet-list">
+                                    <li>The Presentation layer never calls TG.Data directly</li>
+                                    <li>The Data layer never contains business logic — that belongs in TG.Core</li>
+                                    <li>Dependencies always point downward: UI → Core → Data</li>
+                                    <li>Data always flows back up through each layer in reverse</li>
+                                </ul>
+                            </div>
+
+                            <div class="principle-card card-teal">
+                                <h3>Interface-Based Decoupling</h3>
+                                <ul class="bullet-list">
+                                    <li>TG.Services.Contracts defines C# interfaces for all services</li>
+                                    <li>Both in-process implementations and WCF proxies implement these interfaces</li>
+                                    <li>Callers are fully insulated from whether they call local code or a remote
+                                        service</li>
+                                    <li>This is the seam that allows WCF services to be swapped or mocked in tests</li>
+                                </ul>
+                            </div>
+
+                            <div class="principle-card card-purple">
+                                <h3>Microfrontend Isolation</h3>
+                                <ul class="bullet-list">
+                                    <li>Angular Custom Elements own their DOM, styles, state, and API calls completely
+                                    </li>
+                                    <li>They do not access the surrounding Razor page's JavaScript scope</li>
+                                    <li>The only interface is the HTML tag and its HTML attributes (input bindings)</li>
+                                    <li>Each widget can be upgraded or replaced independently of the host page</li>
+                                </ul>
+                            </div>
+
+                            <div class="principle-card card-amber">
+                                <h3>Module Separation at HTTP Boundary</h3>
+                                <ul class="bullet-list">
+                                    <li>GatewayQuestionnaire, WCF services, and ASMX services each live in separate
+                                        solutions</li>
+                                    <li>They are never linked as C# project references from the main application</li>
+                                    <li>Integration happens only via HTTP redirects or SOAP/REST calls</li>
+                                    <li>Each module can be deployed, scaled, and versioned independently</li>
+                                </ul>
+                            </div>
+
+                            <div class="principle-card card-red">
+                                <h3>ADO.NET Over ORM (Main App)</h3>
+                                <ul class="bullet-list">
+                                    <li>The main application deliberately uses raw ADO.NET — no Entity Framework</li>
+                                    <li>Stored procedures are the primary mechanism for complex queries</li>
+                                    <li>Manual mapping via CommonDataUtil.cs acts as a lightweight, explicit ORM</li>
+                                    <li>Exception: GatewayQuestionnaire uses EF 5.0 — isolated to its own solution</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Section 11 -->
+                    <section id="sec11" class="doc-section">
+                        <div class="section-badge"><span class="num">11</span><span class="title">Angular Architecture (TG-Widgets)</span></div>
+                        <h2>Overview</h2>
+                        <p>This document details the architecture of the modern frontend application built within the <code>TG-Widgets</code> project. The application utilizes modern Angular 19 features to provide interactive microfrontends.</p>
+
+                        <h3>1. Standalone Components</h3>
+                        <p>The project heavily relies on <strong>Standalone Components</strong> (a feature stabilized in Angular 15+).</p>
+                        <ul class="bullet-list">
+                            <li><strong>No NgModules:</strong> Components like <code>JobSidePreviewComponent</code>, <code>TgChatBotComponent</code>, and <code>JobsMapComponent</code> are configured with <code>standalone: true</code>.</li>
+                            <li><strong>Direct Imports:</strong> Instead of declaring components in a shared module, standalone components import exactly what they need directly in their <code>@Component({ imports: [...] })</code> metadata (e.g., importing <code>CommonModule</code>, <code>MatDatepickerModule</code>, or specific PrimeNG components).</li>
+                        </ul>
+
+                        <h3>2. Microfrontend Integration (Custom Elements)</h3>
+                        <p>The Angular application is not designed to run as a single page taking over the whole screen. Instead, it is configured to produce <strong>Web Components</strong> (Custom Elements) that can be individually dropped into legacy ASP.NET MVC Razor views.</p>
+                        <ul class="bullet-list">
+                            <li><strong>Mechanism:</strong> It uses <code>@angular/elements</code>.</li>
+                            <li><strong>Bootstrapping:</strong> Inside <code>main.web.ts</code> and <code>main.chatbot.ts</code>, Angular uses <code>bootstrapApplication</code> instead of <code>platformBrowserDynamic()</code>.</li>
+                            <li><strong>Element Creation:</strong>
+                                <div class="mono card-mono" style="margin-top: 0.5rem; margin-bottom: 0.5rem; font-size: 0.9em; white-space: pre-wrap;">const jobSidePreviewElement = createCustomElement(JobSidePreviewComponent, { injector });
+customElements.define('app-job-side-preview', jobSidePreviewElement);</div>
+                            </li>
+                            <li><strong>Consumption:</strong> The legacy MVC backend simply renders <code>&lt;app-job-side-preview&gt;&lt;/app-job-side-preview&gt;</code>, and the browser's Custom Element Registry maps it to the Angular application logic.</li>
+                        </ul>
+
+                        <h3>3. Application State Management</h3>
+                        <p>The application avoids heavy third-party libraries like NgRx in favor of native Angular reactivity. It employs a two-pronged approach:</p>
+                        
+                        <div class="two-col-grid">
+                            <div class="card card-blue full-height">
+                                <div class="card-title">A. Angular Signals (Modern)</div>
+                                <p>Global application state uses modern <strong>Angular Signals</strong> (<code>signal&lt;T&gt;</code>).</p>
+                                <ul class="bullet-list">
+                                    <li><strong>Example (<code>AppStateService</code>):</strong>
+                                        <div class="mono card-mono" style="margin-top: 0.5rem; margin-bottom: 0.5rem; font-size: 0.9em; white-space: pre-wrap;">private _state = signal&lt;ScopeVariables&gt;({ bLoggedIn: false, bJobCart: false, ... });
+state = this._state.asReadonly();
+
+updateVariable(key, value) {
+  this._state.update(state =&gt; ({ ...state, [key]: value }));
+}</div>
+                                    </li>
+                                    <li>Components subscribe to <code>appState.state()</code> to re-render efficiently whenever global UI flags change.</li>
+                                </ul>
+                            </div>
+                            <div class="card card-teal full-height">
+                                <div class="card-title">B. BehaviorSubjects (RxJS)</div>
+                                <p>For complex asynchronous data streams (like search queries and autocomplete filtering), the application utilizes <code>BehaviorSubject</code> from RxJS.</p>
+                                <ul class="bullet-list">
+                                    <li><strong>Examples:</strong> <code>power-search-state.service.ts</code> and <code>autocomplete-state.service.ts</code> use subjects to broadcast the latest API payload configurations across different widget instances.</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <h3>4. Custom Directives</h3>
+                        <p>Directives are utilized to handle DOM manipulation, legacy UI parity, and accessibility features:</p>
+                        <ul class="bullet-list">
+                            <li><strong>Accessibility:</strong> <code>ng-enter.directive.ts</code> and <code>ng-space.directive.ts</code> bind specific keyboard events (Enter/Space) to make custom UI controls fully accessible for screen readers.</li>
+                            <li><strong>UI Logic:</strong> <code>click-to-toggle.directive.ts</code> and <code>prevent-defaultclick.directive.ts</code> manage specific interaction behaviors without bloating component logic.</li>
+                            <li><strong>Autocomplete Extensions:</strong> Directives like <code>ui-autocomplete-option</code> and <code>ui-autocomplete-dropdown</code> are used to customize the behavior of the underlying PrimeNG autocomplete inputs.</li>
+                        </ul>
+
+                        <h3>5. Custom Pipes</h3>
+                        <p>Pipes are heavily used to format and sanitize data before it reaches the view, especially for rich-text job descriptions and translations:</p>
+                        <ul class="bullet-list">
+                            <li><strong>Sanitization & Security:</strong> <code>strip-html.pipe.ts</code>, <code>safe-html.pipe.ts</code>, <code>htmlencode.pipe.ts</code>, and <code>sanitize.pipe.ts</code> ensure that strings coming from the backend or chatbot do not execute malicious scripts (XSS).</li>
+                            <li><strong>Formatting:</strong> <code>truncate.pipe.ts</code> is used to cleanly truncate long text strings with ellipses.</li>
+                            <li><strong>Translation:</strong> The application relies on the <code>@ngx-translate</code> pipe (<code>| translate</code>) to dynamically switch out text based on the loaded JSON dictionary.</li>
+                        </ul>
+                    </section>
+                </main>
+            </div>
+            <script src="script.js"></script>
+        </body>
+
+        </html>
