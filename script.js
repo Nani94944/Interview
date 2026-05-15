@@ -76,3 +76,22 @@ document.addEventListener('DOMContentLoaded', () => {
         fadeObserver.observe(el);
     });
 });
+
+// Search Functionality
+document.addEventListener('DOMContentLoaded', () => {
+    const searchInput = document.getElementById('searchInput');
+    if (searchInput) {
+        searchInput.addEventListener('input', (e) => {
+            const term = e.target.value.toLowerCase();
+            const qaCards = document.querySelectorAll('.qa-card');
+            qaCards.forEach(card => {
+                const text = card.textContent.toLowerCase();
+                if (text.includes(term)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        });
+    }
+});
