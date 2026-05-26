@@ -13,6 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const readStorageKey = 'tgInterviewReadCards';
     const topicStorageKey = 'tgInterviewTopic';
     const openStorageKey = 'tgInterviewOpenCards';
+    const notesStorageKey = 'tgInterviewQuestionNotes';
     const storage = {
         get(key, fallback) {
             try {
@@ -31,7 +32,9 @@ document.addEventListener('DOMContentLoaded', () => {
     };
     const readCards = new Set(JSON.parse(storage.get(readStorageKey, '[]')));
     const openCards = new Set(JSON.parse(storage.get(openStorageKey, '[]')));
+    const questionNotes = JSON.parse(storage.get(notesStorageKey, '{}'));
     let activeTopic = storage.get(topicStorageKey, 'all');
+    let diagramRenderIndex = 0;
 
     const topicMap = {
         sec13: 'backend csharp',
@@ -60,6 +63,54 @@ document.addEventListener('DOMContentLoaded', () => {
         storage.set(openStorageKey, JSON.stringify([...openCards]));
     }
 
+    function saveNotes() {
+        storage.set(notesStorageKey, JSON.stringify(questionNotes));
+    }
+
+    function normalizeMermaidSource(source) {
+        return source
+            .replace(/\r/g, '')
+            .replace(/&amp;/g, '&')
+            .replace(/&lt;/g, '<')
+            .replace(/&gt;/g, '>')
+            .trim();
+    }
+
+    async function renderMermaidIn(root = document) {
+        if (!window.mermaid) return;
+
+        const diagrams = [...root.querySelectorAll('.mermaid')]
+            .filter(diagram => !diagram.dataset.rendered && !diagram.dataset.rendering);
+
+        for (const diagram of diagrams) {
+            const source = normalizeMermaidSource(diagram.dataset.source || diagram.textContent);
+            if (!source) continue;
+
+            diagram.dataset.source = source;
+            diagram.dataset.rendering = 'true';
+
+            try {
+                const id = `mermaid-diagram-${Date.now()}-${diagramRenderIndex++}`;
+                const result = await mermaid.render(id, source);
+                diagram.innerHTML = result.svg;
+                diagram.dataset.rendered = 'true';
+                diagram.classList.remove('mermaid-error');
+            } catch (error) {
+                diagram.classList.add('mermaid-error');
+                diagram.innerHTML = `<div class="diagram-fallback-title">Diagram could not render</div><pre>${source.replace(/[&<>"']/g, char => ({
+                    '&': '&amp;',
+                    '<': '&lt;',
+                    '>': '&gt;',
+                    '"': '&quot;',
+                    "'": '&#039;'
+                }[char]))}</pre>`;
+                diagram.dataset.rendered = 'fallback';
+            } finally {
+                delete diagram.dataset.rendering;
+            }
+        }
+    }
+
     function setCardOpen(card, isOpen) {
         const answer = card.querySelector('.qa-answer');
         const button = card.querySelector('.qa-question-button');
@@ -69,6 +120,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (isOpen) {
             openCards.add(card.dataset.key);
+            renderMermaidIn(card);
         } else {
             openCards.delete(card.dataset.key);
         }
@@ -127,6 +179,20 @@ document.addEventListener('DOMContentLoaded', () => {
             question.replaceWith(header);
             answer.setAttribute('aria-hidden', 'true');
 
+            const notes = document.createElement('div');
+            notes.className = 'qa-notes';
+            notes.innerHTML = `
+                <label class="qa-notes-label" for="notes-${index}">My notes</label>
+                <textarea id="notes-${index}" class="qa-notes-input" rows="4" placeholder="Write your own notes, examples, doubts, or revision points here..."></textarea>
+                <div class="qa-notes-status" aria-live="polite"></div>
+            `;
+            answer.appendChild(notes);
+
+            const notesInput = notes.querySelector('.qa-notes-input');
+            const notesStatus = notes.querySelector('.qa-notes-status');
+            notesInput.value = questionNotes[card.dataset.key] || '';
+            card.classList.toggle('has-notes', notesInput.value.trim().length > 0);
+
             toggle.addEventListener('click', () => {
                 setCardOpen(card, !card.classList.contains('is-open'));
             });
@@ -134,6 +200,23 @@ document.addEventListener('DOMContentLoaded', () => {
             readToggle.addEventListener('click', (event) => {
                 event.stopPropagation();
                 setRead(card, !card.classList.contains('is-read'));
+            });
+
+            let notesTimer;
+            notesInput.addEventListener('input', () => {
+                clearTimeout(notesTimer);
+                const value = notesInput.value.trim();
+                if (value) {
+                    questionNotes[card.dataset.key] = notesInput.value;
+                } else {
+                    delete questionNotes[card.dataset.key];
+                }
+                card.classList.toggle('has-notes', value.length > 0);
+                notesStatus.textContent = 'Saving...';
+                notesTimer = setTimeout(() => {
+                    saveNotes();
+                    notesStatus.textContent = value ? 'Saved' : 'Note cleared';
+                }, 250);
             });
 
             setRead(card, readCards.has(card.dataset.key), true);
@@ -221,6 +304,7 @@ document.addEventListener('DOMContentLoaded', () => {
     window.tgStudy = {
         activateTopic,
         applyFilters,
+        renderMermaidIn,
         updateProgress,
         getVisibleCards
     };
@@ -302,4 +386,5 @@ document.addEventListener('DOMContentLoaded', () => {
     addSectionSummaries();
     activateTopic(activeTopic);
     updateProgress();
+    renderMermaidIn(document.querySelector('.hero') || document);
 });

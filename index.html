@@ -14,8 +14,7 @@
     <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            mermaid.initialize({ startOnLoad: true, theme: 'default' });
-            mermaid.run();
+            mermaid.initialize({ startOnLoad: false, theme: 'default' });
         });
     </script>
 </head>
@@ -1032,7 +1031,7 @@ public partial class Employee
             <div class="qa-answer">
                 <p><strong>Simple Explanation:</strong> Generic class works with any datatype.</p>
                 <div class="mermaid">graph TD
-    A[Generic<T>]
+    A["Generic&lt;T&gt;"]
     A --> B[int]
     A --> C[string]
     A --> D[Employee]</div>
@@ -1614,8 +1613,8 @@ var fast = db.Users.AsQueryable().Where(...);</div>
             <div class="qa-answer">
                 <p><strong>Simple Explanation:</strong> Use the **'Elvis Operator' (?.)**. It's like checking if a door is open before trying to walk through it. if the object is null, it just stops instead of crashing your app.</p>
                 <div class="mermaid">graph LR
-    A[Object] -->|Check ?.| B{Null?}
-    B -->|Yes| C[Stop & Return Null]
+    A[Object] -->|Check optional chaining| B{Null?}
+    B -->|Yes| C[Stop and return null]
     B -->|No| D[Access Property]</div>
                 <div class="mono card-mono code-block">string name = user?.Profile?.Name ?? "Guest";</div>
             </div>
@@ -1628,7 +1627,7 @@ var fast = db.Users.AsQueryable().Where(...);</div>
                 <div class="mermaid">graph LR
     A[Object A] -->|Event Hook| B[Static Class]
     B -.->|Keeps alive| A
-    Note over A: Object A cannot be cleaned up!</div>
+    A --> Note[Cannot be cleaned up until event is unhooked]</div>
                 <div class="mono card-mono code-block">// Always unhook! 
 myBtn.Click -= OnClick;</div>
             </div>
@@ -1654,7 +1653,7 @@ myBtn.Click -= OnClick;</div>
     A[Startup] -->|Create| B[Service 1]
     A -->|Create| C[Service 2]
     A -->|Create| D[Service 3]
-    Note over A: Too much work! Use Lazy Init instead.</div>
+    A --> Note[Too much startup work. Use lazy initialization.]</div>
                 <div class="mono card-mono code-block">services.AddTransient&lt;BigService&gt;(); // Only creates when needed</div>
             </div>
         </div>

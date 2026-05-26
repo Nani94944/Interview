@@ -44,6 +44,20 @@ body {
     overflow-x: hidden;
 }
 
+body::after {
+    content: "Anvesh J";
+    position: fixed;
+    inset: auto 2rem 1.5rem auto;
+    z-index: 999;
+    color: rgba(0, 128, 128, 0.16);
+    font-size: clamp(1.75rem, 4vw, 4.5rem);
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    pointer-events: none;
+    user-select: none;
+}
+
 /* App Layout */
 .app-container {
     display: flex;
@@ -791,6 +805,30 @@ p {
 
 .mermaid { color: #333; font-family: sans-serif; }
 
+.mermaid svg {
+    max-width: 100%;
+    height: auto;
+}
+
+.mermaid-error {
+    display: block;
+    background: #fff7ed;
+    color: #7c2d12;
+    border-color: #fdba74;
+}
+
+.diagram-fallback-title {
+    margin-bottom: 0.75rem;
+    font-weight: 700;
+}
+
+.mermaid-error pre {
+    overflow-x: auto;
+    white-space: pre-wrap;
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+}
+
 /* Accordion Q&A */
 .qa-card {
     padding: 0;
@@ -817,6 +855,18 @@ p {
     border-radius: 999px;
     background: rgba(20, 184, 166, 0.16);
     color: var(--teal-mid);
+    font-size: 0.72rem;
+    font-weight: 700;
+}
+
+.qa-card.has-notes .qa-question-button::before {
+    content: "Note";
+    flex: 0 0 auto;
+    margin-right: 0.5rem;
+    padding: 0.2rem 0.45rem;
+    border-radius: 999px;
+    background: rgba(13, 110, 253, 0.12);
+    color: var(--blue);
     font-size: 0.72rem;
     font-weight: 700;
 }
@@ -892,6 +942,48 @@ p {
 
 .qa-card.is-open .qa-answer {
     display: block;
+}
+
+.qa-notes {
+    margin-top: 1.25rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border-light);
+}
+
+.qa-notes-label {
+    display: block;
+    margin-bottom: 0.45rem;
+    color: var(--text-main);
+    font-size: 0.85rem;
+    font-weight: 700;
+}
+
+.qa-notes-input {
+    width: 100%;
+    min-height: 110px;
+    resize: vertical;
+    padding: 0.8rem 0.9rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    background: var(--bg-dark);
+    color: var(--text-main);
+    font-family: var(--font-sans);
+    font-size: 0.95rem;
+    line-height: 1.5;
+}
+
+.qa-notes-input:focus {
+    outline: none;
+    border-color: var(--teal-mid);
+    box-shadow: 0 0 0 3px rgba(0, 150, 136, 0.12);
+}
+
+.qa-notes-status {
+    min-height: 1.2rem;
+    margin-top: 0.35rem;
+    color: var(--text-dark);
+    font-size: 0.78rem;
+    font-weight: 600;
 }
 
 .qa-card[hidden],
