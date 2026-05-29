@@ -1715,43 +1715,118 @@ app.MapControllerRoute(&quot;default&quot;, &quot;{controller=Home}/{action=Inde
             </div>
         </div>
 
-        <div class="qa-card card-blue">
-            <div class="qa-question">Q3: Difference between ASP.NET MVC and ASP.NET Core MVC?</div>
-            <div class="qa-answer">
-                <p><strong>Answer:</strong> In MVC/Core I keep the request flow clean: routing selects an endpoint, model binding builds inputs, filters/middleware handle cross-cutting concerns, the controller calls services, and the view/API response is returned.</p>
-                <p><strong>Example:</strong></p>
-                <div class="mono card-mono code-block">app.UseRouting();
+<div class="qa-card card-blue"> 
+    <div class="qa-question">
+        Q3: Difference between ASP.NET MVC and ASP.NET Core MVC?
+    </div>
+
+    <div class="qa-answer">
+        <p><strong>Answer:</strong></p>
+
+        <p>
+            ASP.NET MVC is the older web framework that runs only on the 
+            .NET Framework and Windows. ASP.NET Core MVC is the modern, 
+            cross-platform framework that runs on .NET Core / .NET and 
+            supports Windows, Linux, and macOS.
+        </p>
+
+        <p>
+            ASP.NET Core MVC is faster, lightweight, modular, and has 
+            built-in Dependency Injection, middleware pipeline, and better 
+            performance compared to traditional ASP.NET MVC.
+        </p>
+
+        <p><strong>Example:</strong></p>
+
+        <div class="mono card-mono code-block">
+app.UseRouting();
+
 app.UseAuthentication();
+
 app.UseAuthorization();
-app.MapControllerRoute(&quot;default&quot;, &quot;{controller=Home}/{action=Index}/{id?}&quot;);</div>
-                <p><strong>Diagram:</strong></p>
-                <div class="mermaid">graph LR
-  Request --> Middleware
-  Middleware --> Routing
-  Routing --> Controller
-  Controller --> Service
-  Service --> Response</div>
-            </div>
+
+app.MapControllerRoute(
+    name: "default",
+    pattern: "{controller=Home}/{action=Index}/{id?}"
+);
         </div>
 
-        <div class="qa-card card-blue">
-            <div class="qa-question">Q4: What is middleware in ASP.NET Core?</div>
-            <div class="qa-answer">
-                <p><strong>Answer:</strong> In MVC/Core I keep the request flow clean: routing selects an endpoint, model binding builds inputs, filters/middleware handle cross-cutting concerns, the controller calls services, and the view/API response is returned.</p>
-                <p><strong>Example:</strong></p>
-                <div class="mono card-mono code-block">app.UseRouting();
-app.UseAuthentication();
-app.UseAuthorization();
-app.MapControllerRoute(&quot;default&quot;, &quot;{controller=Home}/{action=Index}/{id?}&quot;);</div>
-                <p><strong>Diagram:</strong></p>
-                <div class="mermaid">graph LR
-  Request --> Middleware
-  Middleware --> Routing
-  Routing --> Controller
-  Controller --> Service
-  Service --> Response</div>
-            </div>
+        <p><strong>Diagram:</strong></p>
+
+        <div class="mermaid">
+graph LR
+    A[Client Request] --> B[Middleware Pipeline]
+    B --> C[Routing]
+    C --> D[Controller]
+    D --> E[Service Layer]
+    E --> F[Database]
+    D --> G[View / JSON Response]
+    G --> H[Client Response]
         </div>
+    </div>
+</div>
+
+
+<div class="qa-card card-blue">
+
+    <div class="qa-question">
+        Q4: What is Middleware in ASP.NET Core?
+    </div>
+
+    <div class="qa-answer">
+
+        <p><strong>Answer:</strong></p>
+
+        <p>
+            Middleware is a software component in ASP.NET Core that handles 
+            HTTP requests and responses in the application pipeline.
+        </p>
+
+        <p>
+            Each middleware component can:
+        </p>
+
+        <ul>
+            <li>Process the request</li>
+            <li>Pass the request to the next middleware</li>
+            <li>Modify the response</li>
+            <li>Stop the request pipeline</li>
+        </ul>
+
+        <p>
+            Common middleware examples include Authentication, Authorization, 
+            Routing, Exception Handling, and Logging.
+        </p>
+
+        <p><strong>Example:</strong></p>
+
+        <div class="mono card-mono code-block">
+app.UseExceptionHandler("/Home/Error");
+
+app.UseStaticFiles();
+
+app.UseRouting();
+
+app.UseAuthentication();
+
+app.UseAuthorization();
+        </div>
+
+        <p><strong>Diagram:</strong></p>
+
+        <div class="mermaid">
+graph LR
+    A[HTTP Request] --> B[Exception Middleware]
+    B --> C[Static Files Middleware]
+    C --> D[Routing Middleware]
+    D --> E[Authentication Middleware]
+    E --> F[Authorization Middleware]
+    F --> G[Controller]
+    G --> H[HTTP Response]
+        </div>
+
+    </div>
+</div>
 
         <div class="qa-card card-blue">
             <div class="qa-question">Q5: How does dependency injection work in .NET Core?</div>
@@ -1787,44 +1862,215 @@ app.MapControllerRoute(&quot;default&quot;, &quot;{controller=Home}/{action=Inde
   Service --> Response</div>
             </div>
         </div>
+<div class="qa-card card-blue"> 
+    <div class="qa-question">
+        Q7: Difference between ViewBag, ViewData, TempData, and Strongly Typed Models?
+    </div>
 
-        <div class="qa-card card-blue">
-            <div class="qa-question">Q7: Difference between ViewBag, ViewData, TempData, and strongly typed models?</div>
-            <div class="qa-answer">
-                <p><strong>Answer:</strong> In MVC/Core I keep the request flow clean: routing selects an endpoint, model binding builds inputs, filters/middleware handle cross-cutting concerns, the controller calls services, and the view/API response is returned.</p>
-                <p><strong>Example:</strong></p>
-                <div class="mono card-mono code-block">app.UseRouting();
-app.UseAuthentication();
-app.UseAuthorization();
-app.MapControllerRoute(&quot;default&quot;, &quot;{controller=Home}/{action=Index}/{id?}&quot;);</div>
-                <p><strong>Diagram:</strong></p>
-                <div class="mermaid">graph LR
-  Request --> Middleware
-  Middleware --> Routing
-  Routing --> Controller
-  Controller --> Service
-  Service --> Response</div>
-            </div>
+    <div class="qa-answer">
+
+        <p><strong>Answer:</strong></p>
+
+        <p>
+            ViewBag, ViewData, TempData, and Strongly Typed Models are used 
+            to pass data from Controller to View in ASP.NET MVC/Core.
+        </p>
+
+        <table>
+            <tr>
+                <th>Type</th>
+                <th>Description</th>
+                <th>Lifetime</th>
+            </tr>
+
+            <tr>
+                <td>ViewBag</td>
+                <td>Dynamic object used to pass data</td>
+                <td>Current request only</td>
+            </tr>
+
+            <tr>
+                <td>ViewData</td>
+                <td>Dictionary object used to pass data</td>
+                <td>Current request only</td>
+            </tr>
+
+            <tr>
+                <td>TempData</td>
+                <td>Used to pass data between requests</td>
+                <td>Next request / redirect</td>
+            </tr>
+
+            <tr>
+                <td>Strongly Typed Model</td>
+                <td>Passes a complete model object to the view</td>
+                <td>Current request</td>
+            </tr>
+        </table>
+
+        <p><strong>Simple Real-Time Example:</strong></p>
+
+        <ul>
+            <li>
+                <strong>ViewBag:</strong> Passing page title.
+            </li>
+
+            <li>
+                <strong>ViewData:</strong> Passing small values like username.
+            </li>
+
+            <li>
+                <strong>TempData:</strong> Showing success message after redirect.
+            </li>
+
+            <li>
+                <strong>Strongly Typed Model:</strong> Passing employee or product details.
+            </li>
+        </ul>
+
+        <p><strong>Example:</strong></p>
+
+        <div class="mono card-mono code-block">
+// Controller
+
+public IActionResult Index()
+{
+    ViewBag.Title = "Employee Page";
+
+    ViewData["UserName"] = "Anvesh";
+
+    TempData["SuccessMessage"] = "Employee Added Successfully";
+
+    var employee = new EmployeeModel()
+    {
+        Id = 1,
+        Name = "Anvesh",
+        Department = "IT"
+    };
+
+    return View(employee);
+}
         </div>
 
-        <div class="qa-card card-blue">
-            <div class="qa-question">Q8: What are filters in MVC?</div>
-            <div class="qa-answer">
-                <p><strong>Answer:</strong> In MVC/Core I keep the request flow clean: routing selects an endpoint, model binding builds inputs, filters/middleware handle cross-cutting concerns, the controller calls services, and the view/API response is returned.</p>
-                <p><strong>Example:</strong></p>
-                <div class="mono card-mono code-block">app.UseRouting();
-app.UseAuthentication();
-app.UseAuthorization();
-app.MapControllerRoute(&quot;default&quot;, &quot;{controller=Home}/{action=Index}/{id?}&quot;);</div>
-                <p><strong>Diagram:</strong></p>
-                <div class="mermaid">graph LR
-  Request --> Middleware
-  Middleware --> Routing
-  Routing --> Controller
-  Controller --> Service
-  Service --> Response</div>
-            </div>
+        <div class="mono card-mono code-block">
+@* View *@
+
+<h2>@ViewBag.Title</h2>
+
+<h3>@ViewData["UserName"]</h3>
+
+<h4>@TempData["SuccessMessage"]</h4>
+
+<p>@Model.Name</p>
+<p>@Model.Department</p>
         </div>
+
+        <p><strong>Diagram:</strong></p>
+
+        <div class="mermaid">
+graph LR
+
+    A[Controller]
+
+    A --> B[ViewBag]
+    A --> C[ViewData]
+    A --> D[TempData]
+    A --> E[Strongly Typed Model]
+
+    B --> F[View]
+    C --> F
+    D --> F
+    E --> F
+        </div>
+
+    </div>
+</div>
+
+
+<div class="qa-card card-blue">
+
+    <div class="qa-question">
+        Q8: What are Filters in MVC?
+    </div>
+
+    <div class="qa-answer">
+
+        <p><strong>Answer:</strong></p>
+
+        <p>
+            Filters in ASP.NET MVC/Core are components that execute before or 
+            after an action method. They are used to handle common functionality 
+            like logging, authentication, authorization, exception handling, 
+            and performance monitoring.
+        </p>
+
+        <p>
+            Filters help avoid duplicate code and keep controllers clean.
+        </p>
+
+        <p><strong>Types of Filters:</strong></p>
+
+        <ul>
+            <li><strong>Authorization Filter</strong> → Checks user access</li>
+            <li><strong>Action Filter</strong> → Runs before/after action method</li>
+            <li><strong>Exception Filter</strong> → Handles exceptions</li>
+            <li><strong>Result Filter</strong> → Runs before/after view result</li>
+        </ul>
+
+        <p><strong>Simple Real-Time Example:</strong></p>
+
+        <p>
+            Suppose an employee page should only be accessed by logged-in users. 
+            We can use the <strong>[Authorize]</strong> filter.
+        </p>
+
+        <p><strong>Example:</strong></p>
+
+        <div class="mono card-mono code-block">
+[Authorize]
+public class EmployeeController : Controller
+{
+    public IActionResult Index()
+    {
+        return View();
+    }
+}
+        </div>
+
+        <p><strong>Custom Action Filter Example:</strong></p>
+
+        <div class="mono card-mono code-block">
+public class LogFilter : ActionFilterAttribute
+{
+    public override void OnActionExecuting(ActionExecutingContext context)
+    {
+        Console.WriteLine("Action Executing");
+    }
+}
+        </div>
+
+        <p><strong>Diagram:</strong></p>
+
+        <div class="mermaid">
+graph LR
+
+    A[HTTP Request]
+        --> B[Authorization Filter]
+
+    B --> C[Action Filter]
+
+    C --> D[Controller Action]
+
+    D --> E[Result Filter]
+
+    E --> F[Response]
+
+    D --> G[Exception Filter]
+        </div>
+
+    </div>
+</div>
+
 
         <div class="qa-card card-red">
             <div class="qa-question">Q9: Difference between action filter, authorization filter, exception filter, and result filter?</div>
@@ -1846,97 +2092,437 @@ public IActionResult GetUsers() =&gt; Ok(_service.GetUsers());</div>
             </div>
         </div>
 
-        <div class="qa-card card-blue">
-            <div class="qa-question">Q10: How does routing work in ASP.NET Core?</div>
-            <div class="qa-answer">
-                <p><strong>Answer:</strong> In MVC/Core I keep the request flow clean: routing selects an endpoint, model binding builds inputs, filters/middleware handle cross-cutting concerns, the controller calls services, and the view/API response is returned.</p>
-                <p><strong>Example:</strong></p>
-                <div class="mono card-mono code-block">app.UseRouting();
-app.UseAuthentication();
-app.UseAuthorization();
-app.MapControllerRoute(&quot;default&quot;, &quot;{controller=Home}/{action=Index}/{id?}&quot;);</div>
-                <p><strong>Diagram:</strong></p>
-                <div class="mermaid">graph LR
-  Request --> Middleware
-  Middleware --> Routing
-  Routing --> Controller
-  Controller --> Service
-  Service --> Response</div>
-            </div>
+<div class="qa-card card-blue">
+
+    <div class="qa-question">
+        Q10: How does Routing work in ASP.NET Core?
+    </div>
+
+    <div class="qa-answer">
+
+        <p><strong>Answer:</strong></p>
+
+        <p>
+            Routing in ASP.NET Core maps an incoming HTTP request URL 
+            to a specific controller action or endpoint.
+        </p>
+
+        <p>
+            When a request comes to the application, the routing system 
+            checks the URL pattern and decides which controller and action 
+            method should handle the request.
+        </p>
+
+        <p>
+            Routing helps organize application navigation and API endpoints.
+        </p>
+
+        <p><strong>Example:</strong></p>
+
+        <div class="mono card-mono code-block">
+app.UseRouting();
+
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllerRoute(
+        name: "default",
+        pattern: "{controller=Home}/{action=Index}/{id?}"
+    );
+});
         </div>
 
-        <div class="qa-card card-blue">
-            <div class="qa-question">Q11: Attribute routing vs conventional routing?</div>
-            <div class="qa-answer">
-                <p><strong>Answer:</strong> In MVC/Core I keep the request flow clean: routing selects an endpoint, model binding builds inputs, filters/middleware handle cross-cutting concerns, the controller calls services, and the view/API response is returned.</p>
-                <p><strong>Example:</strong></p>
-                <div class="mono card-mono code-block">app.UseRouting();
-app.UseAuthentication();
-app.UseAuthorization();
-app.MapControllerRoute(&quot;default&quot;, &quot;{controller=Home}/{action=Index}/{id?}&quot;);</div>
-                <p><strong>Diagram:</strong></p>
-                <div class="mermaid">graph LR
-  Request --> Middleware
-  Middleware --> Routing
-  Routing --> Controller
-  Controller --> Service
-  Service --> Response</div>
-            </div>
+        <p><strong>URL Example:</strong></p>
+
+        <div class="mono card-mono code-block">
+/Employee/Details/10
         </div>
 
-        <div class="qa-card card-blue">
-            <div class="qa-question">Q12: What is Web API and how is it different from MVC?</div>
-            <div class="qa-answer">
-                <p><strong>Answer:</strong> In MVC/Core I keep the request flow clean: routing selects an endpoint, model binding builds inputs, filters/middleware handle cross-cutting concerns, the controller calls services, and the view/API response is returned.</p>
-                <p><strong>Example:</strong></p>
-                <div class="mono card-mono code-block">app.UseRouting();
-app.UseAuthentication();
-app.UseAuthorization();
-app.MapControllerRoute(&quot;default&quot;, &quot;{controller=Home}/{action=Index}/{id?}&quot;);</div>
-                <p><strong>Diagram:</strong></p>
-                <div class="mermaid">graph LR
-  Request --> Middleware
-  Middleware --> Routing
-  Routing --> Controller
-  Controller --> Service
-  Service --> Response</div>
-            </div>
+        <p>
+            Here:
+        </p>
+
+        <ul>
+            <li><strong>Employee</strong> → Controller</li>
+            <li><strong>Details</strong> → Action Method</li>
+            <li><strong>10</strong> → ID Parameter</li>
+        </ul>
+
+        <p><strong>Controller Example:</strong></p>
+
+        <div class="mono card-mono code-block">
+public class EmployeeController : Controller
+{
+    public IActionResult Details(int id)
+    {
+        return View();
+    }
+}
         </div>
 
-        <div class="qa-card card-blue">
-            <div class="qa-question">Q13: How do you version Web APIs?</div>
-            <div class="qa-answer">
-                <p><strong>Answer:</strong> For APIs I make contracts explicit, handle failures centrally, use HttpClientFactory for outbound calls, document endpoints with Swagger, and protect large payloads with streaming, limits, and timeouts.</p>
-                <p><strong>Example:</strong></p>
-                <div class="mono card-mono code-block">builder.Services.AddHttpClient&lt;IPaymentClient, PaymentClient&gt;()
-  .SetHandlerLifetime(TimeSpan.FromMinutes(5));</div>
-                <p><strong>Diagram:</strong></p>
-                <div class="mermaid">sequenceDiagram
-  participant Controller
-  participant Service
-  participant HttpClient
-  participant ExternalAPI
-  Controller->>Service: call
-  Service->>HttpClient: typed client
-  HttpClient->>ExternalAPI: timeout/retry policy</div>
-            </div>
+        <p><strong>Diagram:</strong></p>
+
+        <div class="mermaid">
+graph LR
+
+    A[Browser Request URL]
+        --> B[Routing Middleware]
+
+    B --> C[Controller]
+
+    C --> D[Action Method]
+
+    D --> E[Response/View]
         </div>
 
-        <div class="qa-card card-red">
-            <div class="qa-question">Q14: How do you implement global exception handling?</div>
-            <div class="qa-answer">
-                <p><strong>Answer:</strong> For legacy service troubleshooting I capture the exact request, enable tracing/logging, compare client config with service config, and return typed/safe faults. Faulted WCF channels should be aborted, not reused.</p>
-                <p><strong>Example:</strong></p>
-                <div class="mono card-mono code-block">try { client.Close(); }
-catch { client.Abort(); throw; }</div>
-                <p><strong>Diagram:</strong></p>
-                <div class="mermaid">graph LR
-  Failure --> Logs[Trace/message logs]
-  Logs --> Config[Compare config/WSDL]
-  Config --> Fix[Binding/contract/timeout fix]
-  Fix --> Test[Replay request]</div>
-            </div>
+    </div>
+</div>
+
+
+
+<div class="qa-card card-blue">
+
+    <div class="qa-question">
+        Q11: Attribute Routing vs Conventional Routing?
+    </div>
+
+    <div class="qa-answer">
+
+        <p><strong>Answer:</strong></p>
+
+        <p>
+            ASP.NET Core supports two types of routing:
+            <strong>Conventional Routing</strong> and 
+            <strong>Attribute Routing</strong>.
+        </p>
+
+        <p>
+            Conventional Routing defines routes centrally in 
+            <strong>Program.cs</strong>, while Attribute Routing defines 
+            routes directly on controllers and action methods using attributes.
+        </p>
+
+        <table>
+            <tr>
+                <th>Feature</th>
+                <th>Conventional Routing</th>
+                <th>Attribute Routing</th>
+            </tr>
+
+            <tr>
+                <td>Route Location</td>
+                <td>Program.cs</td>
+                <td>Controller / Action Method</td>
+            </tr>
+
+            <tr>
+                <td>Best For</td>
+                <td>MVC applications</td>
+                <td>REST APIs</td>
+            </tr>
+
+            <tr>
+                <td>Flexibility</td>
+                <td>Less flexible</td>
+                <td>More flexible</td>
+            </tr>
+        </table>
+
+        <p><strong>Conventional Routing Example:</strong></p>
+
+        <div class="mono card-mono code-block">
+app.MapControllerRoute(
+    name: "default",
+    pattern: "{controller=Home}/{action=Index}/{id?}"
+);
         </div>
+
+        <p><strong>Attribute Routing Example:</strong></p>
+
+        <div class="mono card-mono code-block">
+[Route("employee")]
+public class EmployeeController : Controller
+{
+    [Route("details/{id}")]
+    public IActionResult Details(int id)
+    {
+        return View();
+    }
+}
+        </div>
+
+        <p><strong>URL Example:</strong></p>
+
+        <div class="mono card-mono code-block">
+/employee/details/10
+        </div>
+
+        <p><strong>Diagram:</strong></p>
+
+        <div class="mermaid">
+graph TD
+
+    A[Incoming Request]
+
+    A --> B[Conventional Routing]
+    A --> C[Attribute Routing]
+
+    B --> D[Controller Action]
+
+    C --> D
+        </div>
+
+    </div>
+</div>
+
+
+<div class="qa-card card-blue">
+
+    <div class="qa-question">
+        Q12: What is Web API and how is it different from MVC?
+    </div>
+
+    <div class="qa-answer">
+
+        <p><strong>Answer:</strong></p>
+
+        <p>
+            Web API is a framework used to build RESTful HTTP services 
+            that return data such as JSON or XML.
+        </p>
+
+        <p>
+            ASP.NET MVC is mainly used for building web applications 
+            that return Views (HTML pages), while Web API is mainly used 
+            for communication between applications, mobile apps, Angular/React frontends, and services.
+        </p>
+
+        <table>
+            <tr>
+                <th>Feature</th>
+                <th>MVC</th>
+                <th>Web API</th>
+            </tr>
+
+            <tr>
+                <td>Purpose</td>
+                <td>Build UI/Web Pages</td>
+                <td>Build REST APIs</td>
+            </tr>
+
+            <tr>
+                <td>Response Type</td>
+                <td>HTML View</td>
+                <td>JSON/XML Data</td>
+            </tr>
+
+            <tr>
+                <td>Used By</td>
+                <td>Browser Users</td>
+                <td>Frontend Apps / Mobile Apps</td>
+            </tr>
+        </table>
+
+        <p><strong>Simple Real-Time Example:</strong></p>
+
+        <ul>
+            <li>
+                <strong>MVC:</strong> Employee Management Website UI
+            </li>
+
+            <li>
+                <strong>Web API:</strong> Angular application fetching employee data
+            </li>
+        </ul>
+
+        <p><strong>Web API Example:</strong></p>
+
+        <div class="mono card-mono code-block">
+[ApiController]
+[Route("api/[controller]")]
+public class EmployeeController : ControllerBase
+{
+    [HttpGet]
+    public IActionResult GetEmployees()
+    {
+        return Ok();
+    }
+}
+        </div>
+
+        <p><strong>Diagram:</strong></p>
+
+        <div class="mermaid">
+graph LR
+
+    A[Angular / Mobile App]
+        --> B[Web API]
+
+    B --> C[Business Service]
+
+    C --> D[Database]
+
+    D --> B
+
+    B --> E[JSON Response]
+        </div>
+
+    </div>
+</div>
+
+
+
+<div class="qa-card card-blue">
+
+    <div class="qa-question">
+        Q13: How do you version Web APIs?
+    </div>
+
+    <div class="qa-answer">
+
+        <p><strong>Answer:</strong></p>
+
+        <p>
+            API Versioning is used to manage changes in APIs without 
+            breaking existing client applications.
+        </p>
+
+        <p>
+            When new changes are introduced, we create a new API version 
+            while keeping old versions working for existing users.
+        </p>
+
+        <p><strong>Common API Versioning Methods:</strong></p>
+
+        <ul>
+            <li>URL Versioning → /api/v1/employees</li>
+            <li>Query String Versioning → /api/employees?version=1</li>
+            <li>Header Versioning</li>
+        </ul>
+
+        <p>
+            URL versioning is the most commonly used and easiest to maintain.
+        </p>
+
+        <p><strong>Example:</strong></p>
+
+        <div class="mono card-mono code-block">
+[ApiVersion("1.0")]
+[Route("api/v{version:apiVersion}/employee")]
+[ApiController]
+public class EmployeeController : ControllerBase
+{
+    [HttpGet]
+    public IActionResult Get()
+    {
+        return Ok("Version 1");
+    }
+}
+        </div>
+
+        <p><strong>URL Example:</strong></p>
+
+        <div class="mono card-mono code-block">
+/api/v1/employee
+        </div>
+
+        <p><strong>Simple Real-Time Example:</strong></p>
+
+        <p>
+            Suppose a mobile app uses API Version 1. 
+            Later, new fields are added in Version 2. 
+            Old mobile apps can still use v1 without breaking.
+        </p>
+
+        <p><strong>Diagram:</strong></p>
+
+        <div class="mermaid">
+graph TD
+
+    A[Client Request]
+
+    A --> B[API V1]
+    A --> C[API V2]
+
+    B --> D[Old Response Format]
+
+    C --> E[New Response Format]
+        </div>
+
+    </div>
+</div>
+
+
+
+<div class="qa-card card-red">
+
+    <div class="qa-question">
+        Q14: How do you implement Global Exception Handling?
+    </div>
+
+    <div class="qa-answer">
+
+        <p><strong>Answer:</strong></p>
+
+        <p>
+            Global Exception Handling is used to catch unhandled exceptions 
+            in one central place instead of writing try-catch blocks 
+            in every controller or service.
+        </p>
+
+        <p>
+            In ASP.NET Core, this is commonly implemented using 
+            Exception Handling Middleware.
+        </p>
+
+        <p>
+            It helps return consistent error responses and improves logging 
+            and application monitoring.
+        </p>
+
+        <p><strong>Example:</strong></p>
+
+        <div class="mono card-mono code-block">
+app.UseExceptionHandler(errorApp =>
+{
+    errorApp.Run(async context =>
+    {
+        context.Response.StatusCode = 500;
+
+        await context.Response.WriteAsync(
+            "Something went wrong."
+        );
+    });
+});
+        </div>
+
+        <p><strong>Simple Real-Time Example:</strong></p>
+
+        <p>
+            Suppose database connection fails in any controller. 
+            Instead of application crash or ugly error pages, 
+            middleware catches the exception and returns a proper error response.
+        </p>
+
+        <p><strong>Diagram:</strong></p>
+
+        <div class="mermaid">
+graph LR
+
+    A[HTTP Request]
+        --> B[Middleware Pipeline]
+
+    B --> C[Controller / Service]
+
+    C --> D[Exception Occurred]
+
+    D --> E[Global Exception Middleware]
+
+    E --> F[Error Response + Logging]
+        </div>
+
+    </div>
+</div>
+
 
         <div class="qa-card card-blue">
             <div class="qa-question">Q15: How do you validate models in Web API?</div>
@@ -2033,310 +2619,1374 @@ public IActionResult GetUsers() =&gt; Ok(_service.GetUsers());</div>
             </div>
         </div>
 
-        <div class="qa-card card-blue">
-            <div class="qa-question">Q20: What is CORS and how do you configure it?</div>
-            <div class="qa-answer">
-                <p><strong>Answer:</strong> Security should be enforced at the server boundary, not only in the UI. I validate identity, authorize each protected operation, use HTTPS, avoid exposing sensitive errors, and log security-relevant events for audit.</p>
-                <p><strong>Example:</strong></p>
-                <div class="mono card-mono code-block">[Authorize(Roles = &quot;Admin&quot;)]
-[HttpGet(&quot;users&quot;)]
-public IActionResult GetUsers() =&gt; Ok(_service.GetUsers());</div>
-                <p><strong>Diagram:</strong></p>
-                <div class="mermaid">sequenceDiagram
-  participant Client
-  participant App
-  participant API
-  Client->>App: Request protected action
-  App->>API: Token/credentials
-  API->>API: Authenticate + authorize
-  API-->>Client: 200 or 401/403</div>
-            </div>
+```html id="aspnetcore-advanced-qa"
+<div class="qa-card card-blue">
+
+    <div class="qa-question">
+        Q20: What is CORS and how do you configure it?
+    </div>
+
+    <div class="qa-answer">
+
+        <p><strong>Answer:</strong></p>
+
+        <p>
+            CORS (Cross-Origin Resource Sharing) is a security feature 
+            that allows or blocks requests coming from different domains.
+        </p>
+
+        <p>
+            By default, browsers block requests from different origins 
+            for security reasons.
+        </p>
+
+        <p>
+            Example:
+        </p>
+
+        <ul>
+            <li>
+                Angular App → https://myapp.com
+            </li>
+
+            <li>
+                API → https://api.mycompany.com
+            </li>
+        </ul>
+
+        <p>
+            Since both domains are different, the browser blocks the request 
+            unless CORS is enabled on the API server.
+        </p>
+
+        <p><strong>Configuration Example:</strong></p>
+
+        <div class="mono card-mono code-block">
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAngularApp",
+        policy =>
+        {
+            policy.WithOrigins("https://myapp.com")
+                  .AllowAnyHeader()
+                  .AllowAnyMethod();
+        });
+});
         </div>
 
-        <div class="qa-card card-blue">
-            <div class="qa-question">Q21: What is appsettings.json used for?</div>
-            <div class="qa-answer">
-                <p><strong>Answer:</strong> I would explain the concept, connect it to a real production scenario, show the common mistake, and then give the practical implementation. A strong interview answer should include correctness, performance, security, and maintainability.</p>
-                <p><strong>Example:</strong></p>
-                <div class="mono card-mono code-block">// Keep the implementation small, testable, and observable.
-// Validate inputs, handle errors, log context, and measure performance.</div>
-                <p><strong>Diagram:</strong></p>
-                <div class="mermaid">graph LR
-  Requirement --> Design
-  Design --> Implementation
-  Implementation --> Test
-  Test --> Production</div>
-            </div>
+        <div class="mono card-mono code-block">
+app.UseCors("AllowAngularApp");
         </div>
 
-        <div class="qa-card card-blue">
-            <div class="qa-question">Q22: How do environment-specific settings work?</div>
-            <div class="qa-answer">
-                <p><strong>Answer:</strong> I would explain the concept, connect it to a real production scenario, show the common mistake, and then give the practical implementation. A strong interview answer should include correctness, performance, security, and maintainability.</p>
-                <p><strong>Example:</strong></p>
-                <div class="mono card-mono code-block">// Keep the implementation small, testable, and observable.
-// Validate inputs, handle errors, log context, and measure performance.</div>
-                <p><strong>Diagram:</strong></p>
-                <div class="mermaid">graph LR
-  Requirement --> Design
-  Design --> Implementation
-  Implementation --> Test
-  Test --> Production</div>
-            </div>
+        <p><strong>Diagram:</strong></p>
+
+        <div class="mermaid">
+graph LR
+
+    A[Angular App]
+        --> B[CORS Policy Check]
+
+    B --> C[ASP.NET Core API]
+
+    C --> D[Database]
+
+    C --> E[JSON Response]
         </div>
 
-        <div class="qa-card card-blue">
-            <div class="qa-question">Q23: What is the difference between singleton, scoped, and transient services?</div>
-            <div class="qa-answer">
-                <p><strong>Answer:</strong> I separate responsibilities: controllers stay thin, services hold business logic, repositories/data access handle persistence, and DTOs protect API contracts. Dependency lifetime matters because wrong lifetimes can create stale state or threading bugs.</p>
-                <p><strong>Example:</strong></p>
-                <div class="mono card-mono code-block">builder.Services.AddScoped&lt;IOrderService, OrderService&gt;();
-builder.Services.AddScoped&lt;IOrderRepository, OrderRepository&gt;();</div>
-                <p><strong>Diagram:</strong></p>
-                <div class="mermaid">graph TD
-  Controller --> Service
-  Service --> Repository
-  Repository --> Database
-  Controller --> DTO[DTO/ViewModel]</div>
-            </div>
+    </div>
+</div>
+
+
+
+<div class="qa-card card-blue">
+
+    <div class="qa-question">
+        Q21: What is appsettings.json used for?
+    </div>
+
+    <div class="qa-answer">
+
+        <p><strong>Answer:</strong></p>
+
+        <p>
+            appsettings.json is a configuration file in ASP.NET Core 
+            used to store application settings.
+        </p>
+
+        <p>
+            It helps manage configuration values such as:
+        </p>
+
+        <ul>
+            <li>Database connection strings</li>
+            <li>API URLs</li>
+            <li>Logging settings</li>
+            <li>JWT keys</li>
+            <li>Application-specific settings</li>
+        </ul>
+
+        <p>
+            Keeping settings in appsettings.json makes the application 
+            easier to maintain and avoids hardcoding values in code.
+        </p>
+
+        <p><strong>Example:</strong></p>
+
+        <div class="mono card-mono code-block">
+{
+  "ConnectionStrings": {
+    "DefaultConnection":
+      "Server=.;Database=EmployeeDB;Trusted_Connection=True;"
+  },
+
+  "ApiSettings": {
+    "BaseUrl": "https://api.company.com"
+  }
+}
         </div>
 
-        <div class="qa-card card-blue">
-            <div class="qa-question">Q24: When can singleton services cause bugs?</div>
-            <div class="qa-answer">
-                <p><strong>Answer:</strong> I separate responsibilities: controllers stay thin, services hold business logic, repositories/data access handle persistence, and DTOs protect API contracts. Dependency lifetime matters because wrong lifetimes can create stale state or threading bugs.</p>
-                <p><strong>Example:</strong></p>
-                <div class="mono card-mono code-block">builder.Services.AddScoped&lt;IOrderService, OrderService&gt;();
-builder.Services.AddScoped&lt;IOrderRepository, OrderRepository&gt;();</div>
-                <p><strong>Diagram:</strong></p>
-                <div class="mermaid">graph TD
-  Controller --> Service
-  Service --> Repository
-  Repository --> Database
-  Controller --> DTO[DTO/ViewModel]</div>
-            </div>
+        <p><strong>Reading Configuration Example:</strong></p>
+
+        <div class="mono card-mono code-block">
+public class EmployeeService
+{
+    private readonly IConfiguration _configuration;
+
+    public EmployeeService(IConfiguration configuration)
+    {
+        _configuration = configuration;
+    }
+
+    public void GetUrl()
+    {
+        var url = _configuration["ApiSettings:BaseUrl"];
+    }
+}
         </div>
 
-        <div class="qa-card card-blue">
-            <div class="qa-question">Q25: How do you use HttpClientFactory?</div>
-            <div class="qa-answer">
-                <p><strong>Answer:</strong> For APIs I make contracts explicit, handle failures centrally, use HttpClientFactory for outbound calls, document endpoints with Swagger, and protect large payloads with streaming, limits, and timeouts.</p>
-                <p><strong>Example:</strong></p>
-                <div class="mono card-mono code-block">builder.Services.AddHttpClient&lt;IPaymentClient, PaymentClient&gt;()
-  .SetHandlerLifetime(TimeSpan.FromMinutes(5));</div>
-                <p><strong>Diagram:</strong></p>
-                <div class="mermaid">sequenceDiagram
-  participant Controller
-  participant Service
-  participant HttpClient
-  participant ExternalAPI
-  Controller->>Service: call
-  Service->>HttpClient: typed client
-  HttpClient->>ExternalAPI: timeout/retry policy</div>
-            </div>
+        <p><strong>Diagram:</strong></p>
+
+        <div class="mermaid">
+graph LR
+
+    A[appsettings.json]
+        --> B[Configuration Provider]
+
+    B --> C[ASP.NET Core Application]
+
+    C --> D[Services / Controllers]
         </div>
 
-        <div class="qa-card card-blue">
-            <div class="qa-question">Q26: How do you avoid socket exhaustion?</div>
-            <div class="qa-answer">
-                <p><strong>Answer:</strong> For APIs I make contracts explicit, handle failures centrally, use HttpClientFactory for outbound calls, document endpoints with Swagger, and protect large payloads with streaming, limits, and timeouts.</p>
-                <p><strong>Example:</strong></p>
-                <div class="mono card-mono code-block">builder.Services.AddHttpClient&lt;IPaymentClient, PaymentClient&gt;()
-  .SetHandlerLifetime(TimeSpan.FromMinutes(5));</div>
-                <p><strong>Diagram:</strong></p>
-                <div class="mermaid">sequenceDiagram
-  participant Controller
-  participant Service
-  participant HttpClient
-  participant ExternalAPI
-  Controller->>Service: call
-  Service->>HttpClient: typed client
-  HttpClient->>ExternalAPI: timeout/retry policy</div>
-            </div>
+    </div>
+</div>
+
+
+
+<div class="qa-card card-blue">
+
+    <div class="qa-question">
+        Q22: How do environment-specific settings work?
+    </div>
+
+    <div class="qa-answer">
+
+        <p><strong>Answer:</strong></p>
+
+        <p>
+            ASP.NET Core supports environment-specific configuration 
+            using multiple appsettings files.
+        </p>
+
+        <p>
+            Different settings can be maintained for:
+        </p>
+
+        <ul>
+            <li>Development</li>
+            <li>Testing</li>
+            <li>Production</li>
+        </ul>
+
+        <p>
+            The application automatically loads configuration based on 
+            the current environment.
+        </p>
+
+        <p><strong>Example Files:</strong></p>
+
+        <div class="mono card-mono code-block">
+appsettings.json
+
+appsettings.Development.json
+
+appsettings.Production.json
         </div>
 
-        <div class="qa-card card-blue">
-            <div class="qa-question">Q27: How do you implement retry and circuit breaker policies?</div>
-            <div class="qa-answer">
-                <p><strong>Answer:</strong> For APIs I make contracts explicit, handle failures centrally, use HttpClientFactory for outbound calls, document endpoints with Swagger, and protect large payloads with streaming, limits, and timeouts.</p>
-                <p><strong>Example:</strong></p>
-                <div class="mono card-mono code-block">builder.Services.AddHttpClient&lt;IPaymentClient, PaymentClient&gt;()
-  .SetHandlerLifetime(TimeSpan.FromMinutes(5));</div>
-                <p><strong>Diagram:</strong></p>
-                <div class="mermaid">sequenceDiagram
-  participant Controller
-  participant Service
-  participant HttpClient
-  participant ExternalAPI
-  Controller->>Service: call
-  Service->>HttpClient: typed client
-  HttpClient->>ExternalAPI: timeout/retry policy</div>
-            </div>
+        <p><strong>Simple Real-Time Example:</strong></p>
+
+        <ul>
+            <li>
+                Development → Local database connection
+            </li>
+
+            <li>
+                Production → Live production database connection
+            </li>
+        </ul>
+
+        <p><strong>Example:</strong></p>
+
+        <div class="mono card-mono code-block">
+// appsettings.Development.json
+
+{
+  "ConnectionStrings": {
+    "DefaultConnection": "LocalDBConnection"
+  }
+}
         </div>
 
-        <div class="qa-card card-blue">
-            <div class="qa-question">Q28: How do you improve slow API performance?</div>
-            <div class="qa-answer">
-                <p><strong>Answer:</strong> I measure first, then optimize the bottleneck. Common fixes are caching, pagination, async I/O, query tuning, compression, background work, correlation IDs, and dashboards/health checks for production visibility.</p>
-                <p><strong>Example:</strong></p>
-                <div class="mono card-mono code-block">var value = await cache.GetOrCreateAsync(&quot;countries&quot;, entry =&gt; {
-  entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromHours(6);
-  return service.LoadCountriesAsync();
-});</div>
-                <p><strong>Diagram:</strong></p>
-                <div class="mermaid">graph TD
-  Measure[Logs/metrics/profiler] --> Cause[Find bottleneck]
-  Cause --> Cache[Cache hot data]
-  Cause --> Tune[Tune query/code]
-  Cause --> Scale[Scale or background work]</div>
-            </div>
+        <div class="mono card-mono code-block">
+// appsettings.Production.json
+
+{
+  "ConnectionStrings": {
+    "DefaultConnection": "ProductionDBConnection"
+  }
+}
         </div>
 
-        <div class="qa-card card-blue">
-            <div class="qa-question">Q29: How do you cache data in ASP.NET Core?</div>
-            <div class="qa-answer">
-                <p><strong>Answer:</strong> I measure first, then optimize the bottleneck. Common fixes are caching, pagination, async I/O, query tuning, compression, background work, correlation IDs, and dashboards/health checks for production visibility.</p>
-                <p><strong>Example:</strong></p>
-                <div class="mono card-mono code-block">var value = await cache.GetOrCreateAsync(&quot;countries&quot;, entry =&gt; {
-  entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromHours(6);
-  return service.LoadCountriesAsync();
-});</div>
-                <p><strong>Diagram:</strong></p>
-                <div class="mermaid">graph TD
-  Measure[Logs/metrics/profiler] --> Cause[Find bottleneck]
-  Cause --> Cache[Cache hot data]
-  Cause --> Tune[Tune query/code]
-  Cause --> Scale[Scale or background work]</div>
-            </div>
+        <p><strong>Diagram:</strong></p>
+
+        <div class="mermaid">
+graph TD
+
+    A[Application Start]
+
+    A --> B[Check Environment]
+
+    B --> C[Development Settings]
+
+    B --> D[Production Settings]
+
+    C --> E[Load Local Config]
+
+    D --> F[Load Production Config]
         </div>
 
-        <div class="qa-card card-blue">
-            <div class="qa-question">Q30: Memory cache vs distributed cache?</div>
-            <div class="qa-answer">
-                <p><strong>Answer:</strong> I measure first, then optimize the bottleneck. Common fixes are caching, pagination, async I/O, query tuning, compression, background work, correlation IDs, and dashboards/health checks for production visibility.</p>
-                <p><strong>Example:</strong></p>
-                <div class="mono card-mono code-block">var value = await cache.GetOrCreateAsync(&quot;countries&quot;, entry =&gt; {
-  entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromHours(6);
-  return service.LoadCountriesAsync();
-});</div>
-                <p><strong>Diagram:</strong></p>
-                <div class="mermaid">graph TD
-  Measure[Logs/metrics/profiler] --> Cause[Find bottleneck]
-  Cause --> Cache[Cache hot data]
-  Cause --> Tune[Tune query/code]
-  Cause --> Scale[Scale or background work]</div>
-            </div>
+    </div>
+</div>
+
+
+
+<div class="qa-card card-blue">
+
+    <div class="qa-question">
+        Q23: What is the difference between Singleton, Scoped, and Transient Services?
+    </div>
+
+    <div class="qa-answer">
+
+        <p><strong>Answer:</strong></p>
+
+        <p>
+            In ASP.NET Core Dependency Injection, service lifetime defines 
+            how long a service instance should live.
+        </p>
+
+        <table>
+            <tr>
+                <th>Lifetime</th>
+                <th>Behavior</th>
+                <th>Best Use Case</th>
+            </tr>
+
+            <tr>
+                <td>Transient</td>
+                <td>New instance every time requested</td>
+                <td>Lightweight services</td>
+            </tr>
+
+            <tr>
+                <td>Scoped</td>
+                <td>One instance per HTTP request</td>
+                <td>Database operations</td>
+            </tr>
+
+            <tr>
+                <td>Singleton</td>
+                <td>Single instance for entire application</td>
+                <td>Logging, caching, configuration</td>
+            </tr>
+        </table>
+
+        <p><strong>Registration Example:</strong></p>
+
+        <div class="mono card-mono code-block">
+builder.Services.AddTransient&lt;IEmailService, EmailService&gt;();
+
+builder.Services.AddScoped&lt;IEmployeeService, EmployeeService&gt;();
+
+builder.Services.AddSingleton&lt;ILoggingService, LoggingService&gt;();
         </div>
 
-        <div class="qa-card card-blue">
-            <div class="qa-question">Q31: How do you implement Redis caching?</div>
-            <div class="qa-answer">
-                <p><strong>Answer:</strong> I measure first, then optimize the bottleneck. Common fixes are caching, pagination, async I/O, query tuning, compression, background work, correlation IDs, and dashboards/health checks for production visibility.</p>
-                <p><strong>Example:</strong></p>
-                <div class="mono card-mono code-block">var value = await cache.GetOrCreateAsync(&quot;countries&quot;, entry =&gt; {
-  entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromHours(6);
-  return service.LoadCountriesAsync();
-});</div>
-                <p><strong>Diagram:</strong></p>
-                <div class="mermaid">graph TD
-  Measure[Logs/metrics/profiler] --> Cause[Find bottleneck]
-  Cause --> Cache[Cache hot data]
-  Cause --> Tune[Tune query/code]
-  Cause --> Scale[Scale or background work]</div>
-            </div>
+        <p><strong>Simple Real-Time Example:</strong></p>
+
+        <ul>
+            <li>
+                <strong>Transient:</strong> Calculator service → new object every usage
+            </li>
+
+            <li>
+                <strong>Scoped:</strong> DbContext → same object during one request
+            </li>
+
+            <li>
+                <strong>Singleton:</strong> Cache service → one shared object for all users
+            </li>
+        </ul>
+
+        <p><strong>Diagram:</strong></p>
+
+        <div class="mermaid">
+graph TD
+
+    A[HTTP Request 1]
+        --> B[Scoped Instance 1]
+
+    A --> C[Transient Instance 1]
+
+    A --> D[Transient Instance 2]
+
+    E[HTTP Request 2]
+        --> F[Scoped Instance 2]
+
+    G[Singleton Instance]
+        --> A
+
+    G --> E
         </div>
 
-        <div class="qa-card card-blue">
-            <div class="qa-question">Q32: How do you handle file upload in Web API?</div>
-            <div class="qa-answer">
-                <p><strong>Answer:</strong> For APIs I make contracts explicit, handle failures centrally, use HttpClientFactory for outbound calls, document endpoints with Swagger, and protect large payloads with streaming, limits, and timeouts.</p>
-                <p><strong>Example:</strong></p>
-                <div class="mono card-mono code-block">builder.Services.AddHttpClient&lt;IPaymentClient, PaymentClient&gt;()
-  .SetHandlerLifetime(TimeSpan.FromMinutes(5));</div>
-                <p><strong>Diagram:</strong></p>
-                <div class="mermaid">sequenceDiagram
-  participant Controller
-  participant Service
-  participant HttpClient
-  participant ExternalAPI
-  Controller->>Service: call
-  Service->>HttpClient: typed client
-  HttpClient->>ExternalAPI: timeout/retry policy</div>
-            </div>
+    </div>
+</div>
+
+
+
+```html id="httpclient-qa"
+<div class="qa-card card-blue">
+
+    <div class="qa-question">
+        Q24: When can Singleton services cause bugs?
+    </div>
+
+    <div class="qa-answer">
+
+        <p><strong>Answer:</strong></p>
+
+        <p>
+            Singleton services can cause bugs when they store shared mutable data 
+            because the same instance is used by all users and requests 
+            throughout the application's lifetime.
+        </p>
+
+        <p>
+            This may lead to:
+        </p>
+
+        <ul>
+            <li>Thread safety issues</li>
+            <li>Stale or incorrect data</li>
+            <li>Memory leaks</li>
+            <li>Unexpected behavior between users</li>
+        </ul>
+
+        <p>
+            A common mistake is injecting a Scoped service like DbContext 
+            into a Singleton service.
+        </p>
+
+        <p><strong>Wrong Example:</strong></p>
+
+        <div class="mono card-mono code-block">
+builder.Services.AddSingleton&lt;ReportService&gt;();
+builder.Services.AddScoped&lt;AppDbContext&gt;();
         </div>
 
-        <div class="qa-card card-blue">
-            <div class="qa-question">Q33: How do you stream large file downloads?</div>
-            <div class="qa-answer">
-                <p><strong>Answer:</strong> For APIs I make contracts explicit, handle failures centrally, use HttpClientFactory for outbound calls, document endpoints with Swagger, and protect large payloads with streaming, limits, and timeouts.</p>
-                <p><strong>Example:</strong></p>
-                <div class="mono card-mono code-block">builder.Services.AddHttpClient&lt;IPaymentClient, PaymentClient&gt;()
-  .SetHandlerLifetime(TimeSpan.FromMinutes(5));</div>
-                <p><strong>Diagram:</strong></p>
-                <div class="mermaid">sequenceDiagram
-  participant Controller
-  participant Service
-  participant HttpClient
-  participant ExternalAPI
-  Controller->>Service: call
-  Service->>HttpClient: typed client
-  HttpClient->>ExternalAPI: timeout/retry policy</div>
-            </div>
+        <p>
+            Here, Singleton ReportService tries to use Scoped DbContext, 
+            which can create lifetime issues.
+        </p>
+
+        <p><strong>Simple Real-Time Example:</strong></p>
+
+        <p>
+            Suppose a Singleton service stores logged-in user information. 
+            Since the same object is shared by all users, one user's data 
+            may appear for another user.
+        </p>
+
+        <p><strong>Diagram:</strong></p>
+
+        <div class="mermaid">
+graph TD
+
+    A[User 1 Request]
+        --> B[Singleton Service]
+
+    C[User 2 Request]
+        --> B
+
+    B --> D[Shared Data Problem]
         </div>
 
-        <div class="qa-card card-blue">
-            <div class="qa-question">Q34: How do you implement logging in .NET Core?</div>
-            <div class="qa-answer">
-                <p><strong>Answer:</strong> I measure first, then optimize the bottleneck. Common fixes are caching, pagination, async I/O, query tuning, compression, background work, correlation IDs, and dashboards/health checks for production visibility.</p>
-                <p><strong>Example:</strong></p>
-                <div class="mono card-mono code-block">var value = await cache.GetOrCreateAsync(&quot;countries&quot;, entry =&gt; {
-  entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromHours(6);
-  return service.LoadCountriesAsync();
-});</div>
-                <p><strong>Diagram:</strong></p>
-                <div class="mermaid">graph TD
-  Measure[Logs/metrics/profiler] --> Cause[Find bottleneck]
-  Cause --> Cache[Cache hot data]
-  Cause --> Tune[Tune query/code]
-  Cause --> Scale[Scale or background work]</div>
-            </div>
+    </div>
+</div>
+
+
+
+<div class="qa-card card-blue">
+
+    <div class="qa-question">
+        Q25: How do you use HttpClientFactory?
+    </div>
+
+    <div class="qa-answer">
+
+        <p><strong>Answer:</strong></p>
+
+        <p>
+            HttpClientFactory is used in ASP.NET Core to create and manage 
+            HttpClient instances efficiently.
+        </p>
+
+        <p>
+            It helps:
+        </p>
+
+        <ul>
+            <li>Avoid socket exhaustion</li>
+            <li>Improve performance</li>
+            <li>Centralize HTTP client configuration</li>
+            <li>Add retry and circuit breaker policies</li>
+        </ul>
+
+        <p><strong>Registration Example:</strong></p>
+
+        <div class="mono card-mono code-block">
+builder.Services.AddHttpClient();
         </div>
 
-        <div class="qa-card card-blue">
-            <div class="qa-question">Q35: How do you implement correlation IDs?</div>
-            <div class="qa-answer">
-                <p><strong>Answer:</strong> I measure first, then optimize the bottleneck. Common fixes are caching, pagination, async I/O, query tuning, compression, background work, correlation IDs, and dashboards/health checks for production visibility.</p>
-                <p><strong>Example:</strong></p>
-                <div class="mono card-mono code-block">var value = await cache.GetOrCreateAsync(&quot;countries&quot;, entry =&gt; {
-  entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromHours(6);
-  return service.LoadCountriesAsync();
-});</div>
-                <p><strong>Diagram:</strong></p>
-                <div class="mermaid">graph TD
-  Measure[Logs/metrics/profiler] --> Cause[Find bottleneck]
-  Cause --> Cache[Cache hot data]
-  Cause --> Tune[Tune query/code]
-  Cause --> Scale[Scale or background work]</div>
-            </div>
+        <p><strong>Typed Client Example:</strong></p>
+
+        <div class="mono card-mono code-block">
+builder.Services.AddHttpClient&lt;IPaymentService, PaymentService&gt;();
         </div>
 
-        <div class="qa-card card-red">
-            <div class="qa-question">Q36: How do you debug production API failures?</div>
-            <div class="qa-answer">
-                <p><strong>Answer:</strong> I measure first, then optimize the bottleneck. Common fixes are caching, pagination, async I/O, query tuning, compression, background work, correlation IDs, and dashboards/health checks for production visibility.</p>
-                <p><strong>Example:</strong></p>
-                <div class="mono card-mono code-block">var value = await cache.GetOrCreateAsync(&quot;countries&quot;, entry =&gt; {
-  entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromHours(6);
-  return service.LoadCountriesAsync();
-});</div>
-                <p><strong>Diagram:</strong></p>
-                <div class="mermaid">graph TD
-  Measure[Logs/metrics/profiler] --> Cause[Find bottleneck]
-  Cause --> Cache[Cache hot data]
-  Cause --> Tune[Tune query/code]
-  Cause --> Scale[Scale or background work]</div>
-            </div>
+        <p><strong>Usage Example:</strong></p>
+
+        <div class="mono card-mono code-block">
+public class PaymentService : IPaymentService
+{
+    private readonly HttpClient _httpClient;
+
+    public PaymentService(HttpClient httpClient)
+    {
+        _httpClient = httpClient;
+    }
+
+    public async Task GetPayments()
+    {
+        var response =
+            await _httpClient.GetAsync(
+                "https://api.payment.com/payments"
+            );
+    }
+}
         </div>
+
+        <p><strong>Diagram:</strong></p>
+
+        <div class="mermaid">
+sequenceDiagram
+
+    participant Controller
+    participant Service
+    participant HttpClientFactory
+    participant ExternalAPI
+
+    Controller->>Service: Call API
+
+    Service->>HttpClientFactory: Request HttpClient
+
+    HttpClientFactory->>ExternalAPI: Send HTTP Request
+
+    ExternalAPI-->>Service: JSON Response
+        </div>
+
+    </div>
+</div>
+
+
+
+<div class="qa-card card-blue">
+
+    <div class="qa-question">
+        Q26: How do you avoid Socket Exhaustion?
+    </div>
+
+    <div class="qa-answer">
+
+        <p><strong>Answer:</strong></p>
+
+        <p>
+            Socket exhaustion happens when too many HTTP connections are opened 
+            and not reused properly.
+        </p>
+
+        <p>
+            A common mistake is creating a new HttpClient object for every request.
+        </p>
+
+        <p><strong>Wrong Example:</strong></p>
+
+        <div class="mono card-mono code-block">
+// BAD PRACTICE
+
+public async Task GetData()
+{
+    var client = new HttpClient();
+
+    await client.GetAsync("https://api.com");
+}
+        </div>
+
+        <p>
+            This creates many sockets and can crash the application under heavy load.
+        </p>
+
+        <p><strong>Correct Solution:</strong></p>
+
+        <p>
+            Use HttpClientFactory so connections are reused properly.
+        </p>
+
+        <div class="mono card-mono code-block">
+builder.Services.AddHttpClient();
+        </div>
+
+        <p><strong>Simple Real-Time Example:</strong></p>
+
+        <p>
+            Suppose an e-commerce application calls payment APIs thousands 
+            of times. Creating new HttpClient objects repeatedly can exhaust sockets.
+            HttpClientFactory manages connection pooling automatically.
+        </p>
+
+        <p><strong>Diagram:</strong></p>
+
+        <div class="mermaid">
+graph LR
+
+    A[Application Requests]
+        --> B[HttpClientFactory]
+
+    B --> C[Reuse Existing Connections]
+
+    C --> D[External APIs]
+        </div>
+
+    </div>
+</div>
+
+
+
+<div class="qa-card card-blue">
+
+    <div class="qa-question">
+        Q27: How do you implement Retry and Circuit Breaker Policies?
+    </div>
+
+    <div class="qa-answer">
+
+        <p><strong>Answer:</strong></p>
+
+        <p>
+            Retry and Circuit Breaker policies help improve application reliability 
+            when external APIs or services fail temporarily.
+        </p>
+
+        <ul>
+            <li>
+                <strong>Retry:</strong> Automatically retries failed requests.
+            </li>
+
+            <li>
+                <strong>Circuit Breaker:</strong> Stops calling a failing service 
+                temporarily to avoid system overload.
+            </li>
+        </ul>
+
+        <p>
+            In ASP.NET Core, these policies are commonly implemented using Polly 
+            with HttpClientFactory.
+        </p>
+
+        <p><strong>Example:</strong></p>
+
+        <div class="mono card-mono code-block">
+builder.Services.AddHttpClient&lt;IPaymentService, PaymentService&gt;()
+    .AddTransientHttpErrorPolicy(policy =>
+        policy.WaitAndRetryAsync(3, retryAttempt =>
+            TimeSpan.FromSeconds(2)))
+    .AddTransientHttpErrorPolicy(policy =>
+        policy.CircuitBreakerAsync(5,
+            TimeSpan.FromSeconds(30)));
+        </div>
+
+        <p><strong>Simple Real-Time Example:</strong></p>
+
+        <p>
+            Suppose payment API is temporarily down.
+        </p>
+
+        <ul>
+            <li>Retry Policy → tries again automatically</li>
+            <li>
+                Circuit Breaker → stops requests for 30 seconds if failures continue
+            </li>
+        </ul>
+
+        <p><strong>Diagram:</strong></p>
+
+        <div class="mermaid">
+sequenceDiagram
+
+    participant App
+    participant RetryPolicy
+    participant CircuitBreaker
+    participant ExternalAPI
+
+    App->>RetryPolicy: Send Request
+
+    RetryPolicy->>ExternalAPI: Retry Failed Requests
+
+    ExternalAPI-->>RetryPolicy: Failure
+
+    RetryPolicy->>CircuitBreaker: Too Many Failures
+
+    CircuitBreaker-->>App: Stop Requests Temporarily
+        </div>
+
+    </div>
+</div>
+
+
+```html id="performance-cache-qa"
+<div class="qa-card card-blue">
+
+    <div class="qa-question">
+        Q28: How do you improve slow API performance?
+    </div>
+
+    <div class="qa-answer">
+
+        <p><strong>Answer:</strong></p>
+
+        <p>
+            To improve slow API performance, first identify the bottleneck 
+            using logs, monitoring tools, or profiling.
+        </p>
+
+        <p>
+            Common optimization techniques include:
+        </p>
+
+        <ul>
+            <li>Caching frequently used data</li>
+            <li>Using async/await</li>
+            <li>Optimizing database queries</li>
+            <li>Pagination for large data</li>
+            <li>Compression</li>
+            <li>Background processing</li>
+        </ul>
+
+        <p><strong>Simple Real-Time Example:</strong></p>
+
+        <p>
+            Suppose an API loads country data from the database every request. 
+            Instead of querying DB repeatedly, cache the data for faster response.
+        </p>
+
+        <p><strong>Example:</strong></p>
+
+        <div class="mono card-mono code-block">
+var countries = await _cache.GetOrCreateAsync(
+    "countries",
+    async entry =>
+    {
+        entry.AbsoluteExpirationRelativeToNow =
+            TimeSpan.FromHours(6);
+
+        return await _service.LoadCountriesAsync();
+    });
+        </div>
+
+        <p><strong>Diagram:</strong></p>
+
+        <div class="mermaid">
+graph TD
+
+    A[Client Request]
+        --> B[Check Performance]
+
+    B --> C[Find Bottleneck]
+
+    C --> D[Cache Data]
+
+    C --> E[Optimize Queries]
+
+    C --> F[Use Async Processing]
+
+    D --> G[Faster API Response]
+        </div>
+
+    </div>
+</div>
+
+
+
+<div class="qa-card card-blue">
+
+    <div class="qa-question">
+        Q29: How do you cache data in ASP.NET Core?
+    </div>
+
+    <div class="qa-answer">
+
+        <p><strong>Answer:</strong></p>
+
+        <p>
+            Caching stores frequently used data temporarily 
+            so the application can avoid repeated database calls.
+        </p>
+
+        <p>
+            ASP.NET Core supports:
+        </p>
+
+        <ul>
+            <li>Memory Cache</li>
+            <li>Distributed Cache</li>
+            <li>Redis Cache</li>
+        </ul>
+
+        <p><strong>Memory Cache Example:</strong></p>
+
+        <div class="mono card-mono code-block">
+builder.Services.AddMemoryCache();
+        </div>
+
+        <div class="mono card-mono code-block">
+public class CountryService
+{
+    private readonly IMemoryCache _cache;
+
+    public CountryService(IMemoryCache cache)
+    {
+        _cache = cache;
+    }
+
+    public async Task GetCountries()
+    {
+        var data = await _cache.GetOrCreateAsync(
+            "countries",
+            async entry =>
+            {
+                entry.AbsoluteExpirationRelativeToNow =
+                    TimeSpan.FromMinutes(30);
+
+                return await LoadCountriesFromDb();
+            });
+    }
+}
+        </div>
+
+        <p><strong>Simple Real-Time Example:</strong></p>
+
+        <p>
+            Product categories rarely change, so caching them 
+            reduces database load and improves speed.
+        </p>
+
+        <p><strong>Diagram:</strong></p>
+
+        <div class="mermaid">
+graph LR
+
+    A[Client Request]
+        --> B[Cache Check]
+
+    B -->|Cache Hit| C[Return Cached Data]
+
+    B -->|Cache Miss| D[Database]
+
+    D --> E[Store in Cache]
+
+    E --> C
+        </div>
+
+    </div>
+</div>
+
+
+
+<div class="qa-card card-blue">
+
+    <div class="qa-question">
+        Q30: Memory Cache vs Distributed Cache?
+    </div>
+
+    <div class="qa-answer">
+
+        <p><strong>Answer:</strong></p>
+
+        <p>
+            Both Memory Cache and Distributed Cache are used to improve application performance,
+            but they store data differently.
+        </p>
+
+        <table>
+            <tr>
+                <th>Feature</th>
+                <th>Memory Cache</th>
+                <th>Distributed Cache</th>
+            </tr>
+
+            <tr>
+                <td>Storage Location</td>
+                <td>Application Server Memory</td>
+                <td>External Server (Redis/SQL)</td>
+            </tr>
+
+            <tr>
+                <td>Shared Across Servers</td>
+                <td>No</td>
+                <td>Yes</td>
+            </tr>
+
+            <tr>
+                <td>Performance</td>
+                <td>Very Fast</td>
+                <td>Slightly Slower</td>
+            </tr>
+
+            <tr>
+                <td>Best For</td>
+                <td>Single Server Apps</td>
+                <td>Load Balanced Apps</td>
+            </tr>
+        </table>
+
+        <p><strong>Simple Real-Time Example:</strong></p>
+
+        <ul>
+            <li>
+                <strong>Memory Cache:</strong> Small internal application
+            </li>
+
+            <li>
+                <strong>Distributed Cache:</strong> Large-scale cloud applications
+            </li>
+        </ul>
+
+        <p><strong>Diagram:</strong></p>
+
+        <div class="mermaid">
+graph TD
+
+    A[Application Server 1]
+        --> B[Memory Cache]
+
+    C[Application Server 2]
+        --> D[Memory Cache]
+
+    E[Distributed Cache Server]
+        --> A
+
+    E --> C
+        </div>
+
+    </div>
+</div>
+
+
+
+<div class="qa-card card-blue">
+
+    <div class="qa-question">
+        Q31: How do you implement Redis caching?
+    </div>
+
+    <div class="qa-answer">
+
+        <p><strong>Answer:</strong></p>
+
+        <p>
+            Redis is a distributed in-memory caching system 
+            used to improve application performance and scalability.
+        </p>
+
+        <p>
+            Redis stores cache data outside the application server 
+            and can be shared across multiple servers.
+        </p>
+
+        <p><strong>Configuration Example:</strong></p>
+
+        <div class="mono card-mono code-block">
+builder.Services.AddStackExchangeRedisCache(options =>
+{
+    options.Configuration = "localhost:6379";
+
+    options.InstanceName = "EmployeeApp";
+});
+        </div>
+
+        <p><strong>Usage Example:</strong></p>
+
+        <div class="mono card-mono code-block">
+public class EmployeeService
+{
+    private readonly IDistributedCache _cache;
+
+    public EmployeeService(IDistributedCache cache)
+    {
+        _cache = cache;
+    }
+
+    public async Task SetCache()
+    {
+        await _cache.SetStringAsync(
+            "employees",
+            "Employee Data"
+        );
+    }
+}
+        </div>
+
+        <p><strong>Simple Real-Time Example:</strong></p>
+
+        <p>
+            In large e-commerce applications, Redis is used to cache 
+            product details and user sessions for faster response.
+        </p>
+
+        <p><strong>Diagram:</strong></p>
+
+        <div class="mermaid">
+graph LR
+
+    A[ASP.NET Core App]
+        --> B[Redis Cache Server]
+
+    B --> C[Cached Data]
+
+    C --> D[Faster Response]
+        </div>
+
+    </div>
+</div>
+
+
+
+<div class="qa-card card-blue">
+
+    <div class="qa-question">
+        Q32: How do you handle file upload in Web API?
+    </div>
+
+    <div class="qa-answer">
+
+        <p><strong>Answer:</strong></p>
+
+        <p>
+            File upload in ASP.NET Core Web API is commonly handled using 
+            the IFormFile interface.
+        </p>
+
+        <p>
+            The uploaded file is received from multipart/form-data 
+            requests and stored in a folder, database, or cloud storage.
+        </p>
+
+        <p><strong>Example:</strong></p>
+
+        <div class="mono card-mono code-block">
+[HttpPost("upload")]
+public async Task<IActionResult> Upload(IFormFile file)
+{
+    if (file == null || file.Length == 0)
+    {
+        return BadRequest();
+    }
+
+    var path = Path.Combine(
+        "Uploads",
+        file.FileName
+    );
+
+    using var stream = new FileStream(
+        path,
+        FileMode.Create
+    );
+
+    await file.CopyToAsync(stream);
+
+    return Ok("File Uploaded");
+}
+        </div>
+
+        <p><strong>Simple Real-Time Example:</strong></p>
+
+        <p>
+            Suppose an employee management system allows users 
+            to upload profile photos or documents.
+        </p>
+
+        <p><strong>Diagram:</strong></p>
+
+        <div class="mermaid">
+sequenceDiagram
+
+    participant Client
+    participant API
+    participant Storage
+
+    Client->>API: Upload File
+
+    API->>Storage: Save File
+
+    Storage-->>API: File Saved
+
+    API-->>Client: Success Response
+        </div>
+
+    </div>
+</div>
+
+
+```html id="logging-streaming-qa"
+<div class="qa-card card-blue">
+
+    <div class="qa-question">
+        Q33: How do you stream large file downloads?
+    </div>
+
+    <div class="qa-answer">
+
+        <p><strong>Answer:</strong></p>
+
+        <p>
+            Large file streaming allows files to be sent to the client 
+            in small chunks instead of loading the entire file into memory.
+        </p>
+
+        <p>
+            This improves performance and avoids high memory usage 
+            for large files like videos, reports, or backups.
+        </p>
+
+        <p>
+            In ASP.NET Core, streaming is commonly done using FileStream.
+        </p>
+
+        <p><strong>Example:</strong></p>
+
+        <div class="mono card-mono code-block">
+[HttpGet("download")]
+public IActionResult Download()
+{
+    var path = "Files/report.pdf";
+
+    var stream = new FileStream(
+        path,
+        FileMode.Open,
+        FileAccess.Read
+    );
+
+    return File(
+        stream,
+        "application/pdf",
+        "report.pdf"
+    );
+}
+        </div>
+
+        <p><strong>Simple Real-Time Example:</strong></p>
+
+        <p>
+            Suppose users download a 2GB backup file. 
+            Streaming sends data gradually instead of loading the entire file into RAM.
+        </p>
+
+        <p><strong>Diagram:</strong></p>
+
+        <div class="mermaid">
+sequenceDiagram
+
+    participant Client
+    participant API
+    participant FileStorage
+
+    Client->>API: Download Request
+
+    API->>FileStorage: Read File Stream
+
+    FileStorage-->>API: Stream Chunks
+
+    API-->>Client: Send File Gradually
+        </div>
+
+    </div>
+</div>
+
+
+
+<div class="qa-card card-blue">
+
+    <div class="qa-question">
+        Q34: How do you implement Logging in .NET Core?
+    </div>
+
+    <div class="qa-answer">
+
+        <p><strong>Answer:</strong></p>
+
+        <p>
+            Logging is used to track application behavior, errors, 
+            warnings, and important events.
+        </p>
+
+        <p>
+            ASP.NET Core provides built-in logging support through ILogger.
+        </p>
+
+        <p>
+            Logs help during debugging, monitoring, and production troubleshooting.
+        </p>
+
+        <p><strong>Example:</strong></p>
+
+        <div class="mono card-mono code-block">
+public class EmployeeService
+{
+    private readonly ILogger&lt;EmployeeService&gt; _logger;
+
+    public EmployeeService(
+        ILogger&lt;EmployeeService&gt; logger)
+    {
+        _logger = logger;
+    }
+
+    public void GetEmployees()
+    {
+        _logger.LogInformation(
+            "Fetching employee data"
+        );
+
+        _logger.LogWarning(
+            "Slow database response"
+        );
+
+        _logger.LogError(
+            "Database connection failed"
+        );
+    }
+}
+        </div>
+
+        <p><strong>Simple Real-Time Example:</strong></p>
+
+        <p>
+            Suppose payment API fails in production. 
+            Logs help identify the exact request, error, and failure time.
+        </p>
+
+        <p><strong>Diagram:</strong></p>
+
+        <div class="mermaid">
+graph LR
+
+    A[Application]
+        --> B[ILogger]
+
+    B --> C[Console Logs]
+
+    B --> D[File Logs]
+
+    B --> E[Monitoring Tools]
+        </div>
+
+    </div>
+</div>
+
+
+
+<div class="qa-card card-blue">
+
+    <div class="qa-question">
+        Q35: How do you implement Correlation IDs?
+    </div>
+
+    <div class="qa-answer">
+
+        <p><strong>Answer:</strong></p>
+
+        <p>
+            Correlation ID is a unique identifier assigned to each request 
+            to track the complete request flow across services and logs.
+        </p>
+
+        <p>
+            It helps debug distributed systems and production issues easily.
+        </p>
+
+        <p><strong>Simple Real-Time Example:</strong></p>
+
+        <p>
+            Suppose one API request goes through:
+        </p>
+
+        <ul>
+            <li>API Gateway</li>
+            <li>Order Service</li>
+            <li>Payment Service</li>
+            <li>Email Service</li>
+        </ul>
+
+        <p>
+            Using the same Correlation ID helps track the entire request flow.
+        </p>
+
+        <p><strong>Middleware Example:</strong></p>
+
+        <div class="mono card-mono code-block">
+app.Use(async (context, next) =>
+{
+    var correlationId = Guid.NewGuid().ToString();
+
+    context.Items["CorrelationId"] = correlationId;
+
+    context.Response.Headers.Add(
+        "X-Correlation-ID",
+        correlationId
+    );
+
+    await next();
+});
+        </div>
+
+        <p><strong>Diagram:</strong></p>
+
+        <div class="mermaid">
+sequenceDiagram
+
+    participant Client
+    participant API
+    participant OrderService
+    participant PaymentService
+
+    Client->>API: Request
+
+    API->>API: Generate Correlation ID
+
+    API->>OrderService: Pass Correlation ID
+
+    OrderService->>PaymentService: Same Correlation ID
+
+    PaymentService-->>Client: Response with Correlation ID
+        </div>
+
+    </div>
+</div>
+
+
+
+<div class="qa-card card-red">
+
+    <div class="qa-question">
+        Q36: How do you debug Production API failures?
+    </div>
+
+    <div class="qa-answer">
+
+        <p><strong>Answer:</strong></p>
+
+        <p>
+            To debug production API failures, first collect enough information 
+            from logs, monitoring tools, and correlation IDs.
+        </p>
+
+        <p>
+            Common debugging steps include:
+        </p>
+
+        <ul>
+            <li>Check error logs</li>
+            <li>Check correlation IDs</li>
+            <li>Monitor API response times</li>
+            <li>Analyze database queries</li>
+            <li>Check external API failures</li>
+            <li>Review server resource usage</li>
+        </ul>
+
+        <p>
+            Proper logging and monitoring help identify issues quickly 
+            without directly accessing production servers.
+        </p>
+
+        <p><strong>Simple Real-Time Example:</strong></p>
+
+        <p>
+            Suppose users report payment failures.
+        </p>
+
+        <ul>
+            <li>Check logs using Correlation ID</li>
+            <li>Identify failed external payment API call</li>
+            <li>Review timeout or network issue</li>
+        </ul>
+
+        <p><strong>Example Logging:</strong></p>
+
+        <div class="mono card-mono code-block">
+_logger.LogError(
+    ex,
+    "Payment API failed for OrderId: {OrderId}",
+    orderId
+);
+        </div>
+
+        <p><strong>Diagram:</strong></p>
+
+        <div class="mermaid">
+graph TD
+
+    A[Production Failure]
+        --> B[Logs]
+
+    B --> C[Correlation ID]
+
+    C --> D[Find Failed Service]
+
+    D --> E[Fix Issue]
+
+    E --> F[Deploy Solution]
+        </div>
+
+    </div>
+</div>
+
 
         <div class="qa-card card-blue">
             <div class="qa-question">Q37: How do you implement health checks?</div>
